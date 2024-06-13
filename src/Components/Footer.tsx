@@ -1,12 +1,11 @@
 
 const Footer = () => {  
-    //const isAuthenticated = useSelector((state: RootState) => state.auth.isAuth);
     return (
-      <header>
+      <footer>
         <div>
             Footer
         </div>
-      </header>
+      </footer>
     );
   };
   export default Footer;
