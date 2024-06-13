@@ -1,12 +1,20 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Route, Routes } from 'react-router-dom';
+import { AuthLayout, Layout } from './Components/Layout';
+import MainPage from './pages/MainPage';
+import AuthPage from './pages/AuthPage';
 
 function App() {
   return (
-    <>
-      hi
-    </>
+   <Routes>
+    <Route path="/" element={<AuthLayout />}>
+        <Route index element={<MainPage />} />
+      </Route>
+      <Route path="/" element={<Layout />}>
+        <Route path='/auth' element={<AuthPage />} />
+      </Route>
+   </Routes>
   );
 }
 
