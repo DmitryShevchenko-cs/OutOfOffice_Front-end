@@ -17,7 +17,7 @@ const ProjectsPage = () => {
 
   const handleEdit = (id: number) => {
     // Реализация редактирования
-    console.log(`Edit employee with id: ${id}`);
+    
   };
 
   const handleDelete = (id: number) => {

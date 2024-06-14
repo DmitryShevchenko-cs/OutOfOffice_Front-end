@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Project } from '../types/Project';
 import { Table, TableHead, TableBody, TableRow, TableCell, TableContainer, TableSortLabel, Button } from '@mui/material';
+import { LeaveRequest } from '../types/LeaveRequest';
 
 interface TableProps {
-    projects: Project[];
+    leaveRequests: LeaveRequest[];
     onEdit: (id: number) => void;
     onDelete: (id: number) => void;
 }
@@ -11,29 +11,27 @@ interface TableProps {
 // Перечисление для полей, по которым можно сортировать
 enum SortField {
     ID = 'id',
-    MANAGER = 'projectManager.fullName',
-    TYPE = 'projectType.name',
+    EMPLOYEE_NAME = 'employee.fullName',
     START_DATE = 'startDate',
     END_DATE = 'endDate',
-    STATUS = 'status',
+    APPROVAL_STATUS = 'approvalRequest.status',
 }
 
-const EmployeeTable: React.FC<TableProps> = ({ projects, onEdit, onDelete }) => {
+const LeaveRequestTable: React.FC<TableProps> = ({ leaveRequests, onEdit, onDelete }) => {
     const [sortBy, setSortBy] = useState<SortField>(SortField.ID);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
-    // Вспомогательная функция для получения значения поля по пути
+    // Helper function to get the value by path
     const getFieldByPath = (obj: any, path: string): any => {
         const keys = path.split('.');
         return keys.reduce((acc, key) => acc[key], obj);
     };
 
-    // Функция для сортировки проектов
-    const sortedProjects = [...projects].sort((a, b) => {
+    // Function to sort leave requests
+    const sortedLeaveRequests = [...leaveRequests].sort((a, b) => {
         const aValue = getFieldByPath(a, sortBy);
         const bValue = getFieldByPath(b, sortBy);
 
-        // Определение направления сортировки
         if (sortDirection === 'asc') {
             return aValue > bValue ? 1 : aValue < bValue ? -1 : 0;
         } else {
@@ -41,7 +39,7 @@ const EmployeeTable: React.FC<TableProps> = ({ projects, onEdit, onDelete }) => 
         }
     });
 
-    // Обработчик клика по заголовку столбца для сортировки
+    // Sort handler
     const handleSort = (field: SortField) => {
         if (field === sortBy) {
             setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
@@ -56,7 +54,7 @@ const EmployeeTable: React.FC<TableProps> = ({ projects, onEdit, onDelete }) => 
             <Table sx={{backgroundColor:"white", borderRadius:"10px"}}>
                 <TableHead>
                     <TableRow>
-                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
+                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)"}}>
                             <TableSortLabel
                                 active={sortBy === SortField.ID}
                                 direction={sortBy === SortField.ID ? sortDirection : 'asc'}
@@ -67,20 +65,11 @@ const EmployeeTable: React.FC<TableProps> = ({ projects, onEdit, onDelete }) => 
                         </TableCell>
                         <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
                             <TableSortLabel
-                                active={sortBy === SortField.MANAGER}
-                                direction={sortBy === SortField.MANAGER ? sortDirection : 'asc'}
-                                onClick={() => handleSort(SortField.MANAGER)}
+                                active={sortBy === SortField.EMPLOYEE_NAME}
+                                direction={sortBy === SortField.EMPLOYEE_NAME ? sortDirection : 'asc'}
+                                onClick={() => handleSort(SortField.EMPLOYEE_NAME)}
                             >
-                                Manager
-                            </TableSortLabel>
-                        </TableCell>
-                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
-                            <TableSortLabel
-                                active={sortBy === SortField.TYPE}
-                                direction={sortBy === SortField.TYPE ? sortDirection : 'asc'}
-                                onClick={() => handleSort(SortField.TYPE)}
-                            >
-                                Project type
+                                Employee Name
                             </TableSortLabel>
                         </TableCell>
                         <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
@@ -101,32 +90,29 @@ const EmployeeTable: React.FC<TableProps> = ({ projects, onEdit, onDelete }) => 
                                 End Date
                             </TableSortLabel>
                         </TableCell>
-                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>Comment</TableCell>
                         <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
                             <TableSortLabel
-                                active={sortBy === SortField.STATUS}
-                                direction={sortBy === SortField.STATUS ? sortDirection : 'asc'}
-                                onClick={() => handleSort(SortField.STATUS)}
+                                active={sortBy === SortField.APPROVAL_STATUS}
+                                direction={sortBy === SortField.APPROVAL_STATUS ? sortDirection : 'asc'}
+                                onClick={() => handleSort(SortField.APPROVAL_STATUS)}
                             >
-                                Status
+                                Approval Status
                             </TableSortLabel>
                         </TableCell>
                         <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>Actions</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {sortedProjects.map((project) => (
-                        <TableRow key={project.id}>
-                            <TableCell>{project.id}</TableCell>
-                            <TableCell>{project.projectManager.fullName}</TableCell>
-                            <TableCell>{project.projectType.name}</TableCell>
-                            <TableCell>{new Date(project.startDate).toLocaleDateString()}</TableCell>
-                            <TableCell>{new Date(project.endDate).toLocaleDateString()}</TableCell>
-                            <TableCell>{project.comment}</TableCell>
-                            <TableCell>{project.status ? 'Active' : 'Inactive'}</TableCell>
+                    {sortedLeaveRequests.map((leaveRequest) => (
+                        <TableRow key={leaveRequest.id}>
+                            <TableCell>{leaveRequest.id}</TableCell>
+                            <TableCell>{leaveRequest.employee.fullName}</TableCell>
+                            <TableCell>{new Date(leaveRequest.startDate).toLocaleDateString()}</TableCell>
+                            <TableCell>{new Date(leaveRequest.endDate).toLocaleDateString()}</TableCell>
+                            <TableCell>{leaveRequest.approvalRequest.status}</TableCell>
                             <TableCell>
-                                <Button onClick={() => onEdit(project.id)}>Edit</Button>
-                                <Button sx={{color:"red"}} onClick={() => onDelete(project.id)}>Delete</Button>
+                                <Button onClick={() => onEdit(leaveRequest.id)}>Edit</Button>
+                                <Button sx={{color:"red"}} onClick={() => onDelete(leaveRequest.id)}>Delete</Button>
                             </TableCell>
                         </TableRow>
                     ))}
@@ -136,4 +122,4 @@ const EmployeeTable: React.FC<TableProps> = ({ projects, onEdit, onDelete }) => 
     );
 };
 
-export default EmployeeTable;
+export default LeaveRequestTable;

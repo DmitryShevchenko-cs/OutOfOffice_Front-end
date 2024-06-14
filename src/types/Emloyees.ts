@@ -11,14 +11,18 @@ export interface Employee extends BaseEmployee {
     position: Position;
     status: boolean;
     outOfOfficeBalance: number;
-    hrManager: HrManager | null;
+    hrManager: BaseManager | null;
 }
 
-export interface HrManager extends BaseEmployee{
+export interface BaseManager extends BaseEmployee{
 
 }
 
-export interface ProjectManager extends BaseEmployee{
+export interface HrManager extends BaseManager{
+
+}
+
+export interface ProjectManager extends BaseManager{
     
 }
 

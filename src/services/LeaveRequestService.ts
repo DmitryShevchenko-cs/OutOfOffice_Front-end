@@ -1,12 +1,12 @@
 import { api } from "../api/api";
-import { Employee } from "../types/Emloyees";
 import { HttpMethodType } from "../types/HttpInfo";
+import { LeaveRequest } from "../types/LeaveRequest";
 
 export const Api = api.injectEndpoints({
   endpoints: (builder) => ({
-    getAllEmployees: builder.query<Employee[],null>({
+    getAllLeaveRequests: builder.query<LeaveRequest[], null>({
         query: () => ({
-          url: "/api/employee",
+          url: "/api/leaverequest/all",
           method: HttpMethodType.GET,
           responseHandler: async (response) => {
               if (!response.ok) {
@@ -20,4 +20,4 @@ export const Api = api.injectEndpoints({
   }),
 });
 
-export const { useGetAllEmployeesQuery } = Api;
+export const { useGetAllLeaveRequestsQuery } = Api;

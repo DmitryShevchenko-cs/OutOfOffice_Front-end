@@ -1,12 +1,12 @@
 import { api } from "../api/api";
-import { Employee } from "../types/Emloyees";
+import { BaseManager } from "../types/Emloyees";
 import { HttpMethodType } from "../types/HttpInfo";
 
 export const Api = api.injectEndpoints({
   endpoints: (builder) => ({
-    getAllEmployees: builder.query<Employee[],null>({
+    getAllManagers: builder.query<BaseManager[],null>({
         query: () => ({
-          url: "/api/employee",
+          url: "/api/manager",
           method: HttpMethodType.GET,
           responseHandler: async (response) => {
               if (!response.ok) {
@@ -20,4 +20,4 @@ export const Api = api.injectEndpoints({
   }),
 });
 
-export const { useGetAllEmployeesQuery } = Api;
+export const { useGetAllManagersQuery } = Api;

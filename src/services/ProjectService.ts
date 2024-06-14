@@ -2,7 +2,7 @@ import { api } from "../api/api";
 import { HttpMethodType } from "../types/HttpInfo";
 import { Project } from "../types/Project";
 
-export const authApi = api.injectEndpoints({
+export const Api = api.injectEndpoints({
   endpoints: (builder) => ({
     getAllProjets: builder.query<Project[],null>({
         query: () => ({
@@ -20,4 +20,4 @@ export const authApi = api.injectEndpoints({
   }),
 });
 
-export const { useGetAllProjetsQuery } = authApi;
+export const { useGetAllProjetsQuery } = Api;

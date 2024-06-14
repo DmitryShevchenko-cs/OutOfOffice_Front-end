@@ -4,7 +4,7 @@ import CreateUserForm from "../Components/CreateUserForm";
 const CreateUserPage = () => {
     const handleSubmit = async (formData: FormData) => {
         try {
-            const response = await fetch('http://localhost:5182/api/projectmanager', {
+            const response = await fetch('http://localhost:5182/api/manager/project-manager', {
                 method: 'POST',
                 body: formData,
             });
