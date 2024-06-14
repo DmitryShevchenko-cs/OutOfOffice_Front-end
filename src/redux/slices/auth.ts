@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { getValue, setValue, removItem } from "../../Helpers/LocalStorageHelper"
+import { getValue, setValue, removeItem } from "../../Helpers/LocalStorageHelper"
 import { AccessKey, RefreshToken } from '../../Helpers/Сonstants'
 import { IsNullOrEmpty } from "../../Helpers/StringHelper";
 import { IReduxAuthModel } from "../../types/Redux";
@@ -20,8 +20,8 @@ const authSlice = createSlice({
   reducers: {
     userLogout: (state: IReduxAuthModel) => {
       state.isAuth = false;
-      removItem(AccessKey);
-      removItem(RefreshToken)
+      removeItem(AccessKey);
+      removeItem(RefreshToken)
     },
     userLogin: (state: IReduxAuthModel, action: { payload: IAuthInformation }) => {
       state.isAuth = !IsNullOrEmpty(action.payload.accessKey);
