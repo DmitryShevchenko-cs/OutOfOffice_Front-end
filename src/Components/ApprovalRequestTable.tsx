@@ -91,6 +91,15 @@ const ApprovalRequestTable: React.FC<TableProps> = ({ approvalRequests, onEdit, 
                         </TableCell>
                         <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
                             <TableSortLabel
+                                active={sortBy === SortField.STATUS}
+                                direction={sortBy === SortField.STATUS ? sortDirection : 'asc'}
+                                onClick={() => handleSort(SortField.STATUS)}
+                            >
+                                Leave Request Id
+                            </TableSortLabel>
+                        </TableCell>
+                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
+                            <TableSortLabel
                                 active={sortBy === SortField.COMMENT}
                                 direction={sortBy === SortField.COMMENT ? sortDirection : 'asc'}
                                 onClick={() => handleSort(SortField.COMMENT)}
@@ -108,6 +117,7 @@ const ApprovalRequestTable: React.FC<TableProps> = ({ approvalRequests, onEdit, 
                             <TableCell>{approvalRequest.approver?.fullName}</TableCell>
                             <TableCell><img src={approvalRequest.approver?.photo} alt="photo" /></TableCell>
                             <TableCell>{approvalRequest.status}</TableCell>
+                            <TableCell>{approvalRequest.leaveRequest.id}</TableCell>
                             <TableCell>{approvalRequest.comment}</TableCell>
                             {canEditOrDelete(role) && (
                                 <TableCell>

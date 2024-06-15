@@ -23,7 +23,7 @@ enum SortField {
 const LeaveRequestTable: React.FC<TableProps> = ({ leaveRequests, onEdit, onDelete }) => {
     const [sortBy, setSortBy] = useState<SortField>(SortField.ID);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-    const role = useSelector((state: RootState) => state.auth.role); 
+    const role = useSelector((state: RootState) => state.auth.role);
 
     // Helper function to get the value by path
     const getFieldByPath = (obj: any, path: string): any => {
@@ -59,10 +59,10 @@ const LeaveRequestTable: React.FC<TableProps> = ({ leaveRequests, onEdit, onDele
 
     return (
         <TableContainer>
-            <Table sx={{backgroundColor:"white", borderRadius:"10px"}}>
+            <Table sx={{ backgroundColor: "white", borderRadius: "10px" }}>
                 <TableHead>
                     <TableRow>
-                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)"}}>
+                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
                             <TableSortLabel
                                 active={sortBy === SortField.ID}
                                 direction={sortBy === SortField.ID ? sortDirection : 'asc'}
@@ -104,9 +104,27 @@ const LeaveRequestTable: React.FC<TableProps> = ({ leaveRequests, onEdit, onDele
                                 direction={sortBy === SortField.APPROVAL_STATUS ? sortDirection : 'asc'}
                                 onClick={() => handleSort(SortField.APPROVAL_STATUS)}
                             >
-                                Approval Status
+                                Reason
                             </TableSortLabel>
                         </TableCell>
+                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
+                            <TableSortLabel
+                                active={sortBy === SortField.APPROVAL_STATUS}
+                                direction={sortBy === SortField.APPROVAL_STATUS ? sortDirection : 'asc'}
+                                onClick={() => handleSort(SortField.APPROVAL_STATUS)}
+                            >
+                                Comment
+                            </TableSortLabel>
+                        </TableCell>
+                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
+                                <TableSortLabel
+                                    active={sortBy === SortField.APPROVAL_STATUS}
+                                    direction={sortBy === SortField.APPROVAL_STATUS ? sortDirection : 'asc'}
+                                    onClick={() => handleSort(SortField.APPROVAL_STATUS)}
+                                >
+                                    Status
+                                </TableSortLabel>
+                            </TableCell>
                         {canEditOrDelete(role) && <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>Actions</TableCell>}
                     </TableRow>
                 </TableHead>
@@ -117,11 +135,13 @@ const LeaveRequestTable: React.FC<TableProps> = ({ leaveRequests, onEdit, onDele
                             <TableCell>{leaveRequest.employee.fullName}</TableCell>
                             <TableCell>{new Date(leaveRequest.startDate).toLocaleDateString()}</TableCell>
                             <TableCell>{new Date(leaveRequest.endDate).toLocaleDateString()}</TableCell>
-                            <TableCell>{leaveRequest.approvalRequest.status}</TableCell>
+                            <TableCell>{leaveRequest.absenceReason.reasonDescription}</TableCell>
+                            <TableCell>{leaveRequest.comment}</TableCell>
+                            <TableCell>{leaveRequest.status}</TableCell>
                             {canEditOrDelete(role) && (
                                 <TableCell>
                                     <Button onClick={() => onEdit(leaveRequest.id)}>Edit</Button>
-                                    <Button sx={{color:"red"}} onClick={() => onDelete(leaveRequest.id)}>Delete</Button>
+                                    <Button sx={{ color: "red" }} onClick={() => onDelete(leaveRequest.id)}>Delete</Button>
                                 </TableCell>
                             )}
                         </TableRow>

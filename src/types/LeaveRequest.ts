@@ -2,12 +2,14 @@ import { ApprovalRequest } from "./ApprovalRequest";
 import { Employee } from "./Emloyees";
 
 export interface LeaveRequest {
-    id: number,
+    id: number
     employee: Employee
     approvalRequest: ApprovalRequest
-    startDate: Date,
-    endDate: Date,
-    commnet: string
+    absenceReason : AbsenceReason
+    startDate: Date
+    endDate: Date
+    status: string
+    comment: string
 }
 
 export interface AbsenceReason {

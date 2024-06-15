@@ -11,7 +11,7 @@ import { UserType } from "../types/User";
 const mainContent = (
   <>
     <Header />
-    <Container disableGutters={true} classes={{ root: styles.mainContainer }}>
+    <Container disableGutters={true} maxWidth={false} classes={{ root: styles.mainContainer }}>
       <Outlet />
     </Container>
     <Footer />

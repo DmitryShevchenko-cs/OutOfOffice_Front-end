@@ -1,3 +1,4 @@
+import { UserType } from "./User";
 import { Position, Subdivision } from "./selections";
 
 export interface BaseEmployee{
@@ -15,7 +16,7 @@ export interface Employee extends BaseEmployee {
 }
 
 export interface BaseManager extends BaseEmployee{
-
+    role:UserType
 }
 
 export interface HrManager extends BaseManager{
