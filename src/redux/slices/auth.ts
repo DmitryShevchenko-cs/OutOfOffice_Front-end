@@ -23,7 +23,8 @@ const authSlice = createSlice({
     userLogout: (state: IReduxAuthModel) => {
       state.isAuth = false;
       removeItem(AccessKey);
-      removeItem(RefreshToken)
+      removeItem(RefreshToken);
+      removeItem(Role)
     },
     userLogin: (state: IReduxAuthModel, action: { payload: IAuthInformation }) => {
       state.isAuth = !IsNullOrEmpty(action.payload.accessKey);

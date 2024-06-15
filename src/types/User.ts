@@ -21,5 +21,5 @@ export enum UserType{
   HrManager = "HrManager",
   ProjectManager = "ProjectManager",
   Employee = "Employee",
-  Any = "any"
+  Role = "Role"
 }
