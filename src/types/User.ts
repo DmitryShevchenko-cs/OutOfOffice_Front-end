@@ -7,7 +7,6 @@ export interface ILoginData {
 export interface ICurrentUserModel{
   fullName: string,
   photo: string | null;
-  userType: UserType
 }
 
 export interface ICreateUserModel{
@@ -22,4 +21,5 @@ export enum UserType{
   HrManager = "HrManager",
   ProjectManager = "ProjectManager",
   Employee = "Employee",
+  Role = "Role"
 }
