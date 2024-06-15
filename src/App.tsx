@@ -15,6 +15,7 @@ import CreateUserPage from './pages/CreateUserPage';
 
 function App() {
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
+  const role = useSelector((state: RootState) => state.auth.role);
 
   return (
     <Routes>

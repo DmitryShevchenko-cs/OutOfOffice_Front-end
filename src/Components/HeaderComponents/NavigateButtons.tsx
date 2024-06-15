@@ -4,17 +4,19 @@ import { Link as RouterLink } from "react-router-dom";
 import style from "../../scss/navigateButtons.module.scss"
 import { useGetCurrentUserQuery } from "../../services/UserService";
 import { UserType } from "../../types/User";
+import { RootState } from "../../redux/store";
+import { useSelector } from "react-redux";
 
 const NavigateButtons = () => {
     const {data: user} = useGetCurrentUserQuery(null); 
-    
+    const role = useSelector((state: RootState) => state.auth.role);
     let buttons = (
         <>
             <Button component={RouterLink} to="/" color="inherit">Home</Button>
         </>
     );
 
-    switch (user?.userType) {
+    switch (role) {
         case UserType.Admin:
             buttons = (
                 <>
