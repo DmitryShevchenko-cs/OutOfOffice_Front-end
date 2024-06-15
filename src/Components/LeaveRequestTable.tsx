@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Table, TableHead, TableBody, TableRow, TableCell, TableContainer, TableSortLabel, Button } from '@mui/material';
 import { LeaveRequest } from '../types/LeaveRequest';
+import { UserType } from '../types/User';
+import { RootState } from '../redux/store';
+import { useSelector } from 'react-redux';
 
 interface TableProps {
     leaveRequests: LeaveRequest[];
@@ -20,6 +23,7 @@ enum SortField {
 const LeaveRequestTable: React.FC<TableProps> = ({ leaveRequests, onEdit, onDelete }) => {
     const [sortBy, setSortBy] = useState<SortField>(SortField.ID);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+    const role = useSelector((state: RootState) => state.auth.role); 
 
     // Helper function to get the value by path
     const getFieldByPath = (obj: any, path: string): any => {
@@ -47,6 +51,10 @@ const LeaveRequestTable: React.FC<TableProps> = ({ leaveRequests, onEdit, onDele
             setSortBy(field);
             setSortDirection('asc');
         }
+    };
+
+    const canEditOrDelete = (role: string) => {
+        return role === UserType.Admin || role === UserType.Employee;
     };
 
     return (
@@ -99,7 +107,7 @@ const LeaveRequestTable: React.FC<TableProps> = ({ leaveRequests, onEdit, onDele
                                 Approval Status
                             </TableSortLabel>
                         </TableCell>
-                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>Actions</TableCell>
+                        {canEditOrDelete(role) && <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>Actions</TableCell>}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -110,10 +118,12 @@ const LeaveRequestTable: React.FC<TableProps> = ({ leaveRequests, onEdit, onDele
                             <TableCell>{new Date(leaveRequest.startDate).toLocaleDateString()}</TableCell>
                             <TableCell>{new Date(leaveRequest.endDate).toLocaleDateString()}</TableCell>
                             <TableCell>{leaveRequest.approvalRequest.status}</TableCell>
-                            <TableCell>
-                                <Button onClick={() => onEdit(leaveRequest.id)}>Edit</Button>
-                                <Button sx={{color:"red"}} onClick={() => onDelete(leaveRequest.id)}>Delete</Button>
-                            </TableCell>
+                            {canEditOrDelete(role) && (
+                                <TableCell>
+                                    <Button onClick={() => onEdit(leaveRequest.id)}>Edit</Button>
+                                    <Button sx={{color:"red"}} onClick={() => onDelete(leaveRequest.id)}>Delete</Button>
+                                </TableCell>
+                            )}
                         </TableRow>
                     ))}
                 </TableBody>

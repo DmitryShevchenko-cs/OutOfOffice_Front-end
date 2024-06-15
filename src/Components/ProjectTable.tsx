@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Project } from '../types/Project';
 import { Table, TableHead, TableBody, TableRow, TableCell, TableContainer, TableSortLabel, Button } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
+import { UserType } from '../types/User';
 
 interface TableProps {
     projects: Project[];
@@ -21,14 +24,13 @@ enum SortField {
 const EmployeeTable: React.FC<TableProps> = ({ projects, onEdit, onDelete }) => {
     const [sortBy, setSortBy] = useState<SortField>(SortField.ID);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+    const role = useSelector((state: RootState) => state.auth.role); 
 
-    // Вспомогательная функция для получения значения поля по пути
     const getFieldByPath = (obj: any, path: string): any => {
         const keys = path.split('.');
         return keys.reduce((acc, key) => acc[key], obj);
     };
 
-    // Функция для сортировки проектов
     const sortedProjects = [...projects].sort((a, b) => {
         const aValue = getFieldByPath(a, sortBy);
         const bValue = getFieldByPath(b, sortBy);
@@ -49,6 +51,10 @@ const EmployeeTable: React.FC<TableProps> = ({ projects, onEdit, onDelete }) => 
             setSortBy(field);
             setSortDirection('asc');
         }
+    };
+
+    const canEditOrDelete = (role: string) => {
+        return role === UserType.Admin || role === UserType.ProjectManager;
     };
 
     return (
@@ -111,7 +117,7 @@ const EmployeeTable: React.FC<TableProps> = ({ projects, onEdit, onDelete }) => 
                                 Status
                             </TableSortLabel>
                         </TableCell>
-                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>Actions</TableCell>
+                        {canEditOrDelete(role) && <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>Actions</TableCell>}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -124,10 +130,12 @@ const EmployeeTable: React.FC<TableProps> = ({ projects, onEdit, onDelete }) => 
                             <TableCell>{new Date(project.endDate).toLocaleDateString()}</TableCell>
                             <TableCell>{project.comment}</TableCell>
                             <TableCell>{project.status ? 'Active' : 'Inactive'}</TableCell>
-                            <TableCell>
-                                <Button onClick={() => onEdit(project.id)}>Edit</Button>
-                                <Button sx={{color:"red"}} onClick={() => onDelete(project.id)}>Delete</Button>
-                            </TableCell>
+                            {canEditOrDelete(role) && (
+                                <TableCell>
+                                    <Button onClick={() => onEdit(project.id)}>Edit</Button>
+                                    <Button sx={{color:"red"}} onClick={() => onDelete(project.id)}>Delete</Button>
+                                </TableCell>
+                            )}
                         </TableRow>
                     ))}
                 </TableBody>

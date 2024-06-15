@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Employee } from '../types/Emloyees';
 import { Table, TableHead, TableBody, TableRow, TableCell, TableContainer, TableSortLabel, Button } from '@mui/material';
+import { UserType } from '../types/User';
+import { RootState } from '../redux/store';
+import { useSelector } from 'react-redux';
 
 interface TableProps {
     employees: Employee[];
@@ -22,7 +25,8 @@ enum SortField {
 const EmployeeTable: React.FC<TableProps> = ({ employees, onEdit, onDelete }) => {
     const [sortBy, setSortBy] = useState<SortField>(SortField.ID);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-
+    const role = useSelector((state: RootState) => state.auth.role); 
+    
     // Вспомогательная функция для получения значения поля по пути
     const getFieldByPath = (obj: any, path: string): any => {
         const keys = path.split('.');
@@ -50,6 +54,10 @@ const EmployeeTable: React.FC<TableProps> = ({ employees, onEdit, onDelete }) =>
             setSortBy(field);
             setSortDirection('asc');
         }
+    };
+
+    const canEditOrDelete = (role: string) => {
+        return role === UserType.Admin || role === UserType.HrManager;
     };
 
     return (
@@ -121,7 +129,7 @@ const EmployeeTable: React.FC<TableProps> = ({ employees, onEdit, onDelete }) =>
                                 HR Manager
                             </TableSortLabel>
                         </TableCell>
-                        <TableCell  sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>Actions</TableCell>
+                        {canEditOrDelete(role) && <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>Actions</TableCell>}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -135,10 +143,12 @@ const EmployeeTable: React.FC<TableProps> = ({ employees, onEdit, onDelete }) =>
                             <TableCell>{employee.status ? 'Active' : 'Inactive'}</TableCell>
                             <TableCell>{employee.outOfOfficeBalance}</TableCell>
                             <TableCell>{employee.hrManager?.fullName}</TableCell>
-                            <TableCell>
-                                <Button onClick={() => onEdit(employee.id)}>Edit</Button>
-                                <Button sx={{color:"red"}} onClick={() => onDelete(employee.id)}>Delete</Button>
-                            </TableCell>
+                            {canEditOrDelete(role) && (
+                                <TableCell>
+                                    <Button onClick={() => onEdit(employee.id)}>Edit</Button>
+                                    <Button sx={{color:"red"}} onClick={() => onDelete(employee.id)}>Delete</Button>
+                                </TableCell>
+                            )}
                         </TableRow>
                     ))}
                 </TableBody>
