@@ -31,9 +31,8 @@ export const Api = api.injectEndpoints({
         },
       }),
     }),
-    GetLeaveRequest: builder.query<null, number>({
+    getLeaveRequest: builder.query<LeaveRequest, number>({
       query: (requestId) => ({
-        body: requestId,
         url: `/api/leaverequest/${requestId}`,
         method: HttpMethodType.GET,
         responseHandler: async (response) => {
@@ -48,4 +47,4 @@ export const Api = api.injectEndpoints({
   }),
 });
 
-export const { useGetAllLeaveRequestsQuery, useUpdateLeaveRequestQuery } = Api;
+export const { useGetAllLeaveRequestsQuery, useUpdateLeaveRequestQuery, useGetLeaveRequestQuery} = Api;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import EmployeeTable from "../Components/EmployeeTable";
+import EmployeeTable from "../Components/Tables/EmployeeTable";
 import { Employee } from "../types/Emloyees";
 import { useGetAllEmployeesQuery } from "../services/EmployeeService";
 

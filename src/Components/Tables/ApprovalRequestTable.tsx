@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Table, TableHead, TableBody, TableRow, TableCell, TableContainer, TableSortLabel, Button, TextField } from '@mui/material';
-import { ApprovalRequest, Status } from '../types/ApprovalRequest';
-import { UserType } from '../types/User';
-import { RootState } from '../redux/store';
+import { ApprovalRequest, Status } from '../../types/ApprovalRequest';
+import { UserType } from '../../types/User';
+import { RootState } from '../../redux/store';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 interface TableProps {
     approvalRequests: ApprovalRequest[];
@@ -13,7 +14,6 @@ interface TableProps {
     setComments: React.Dispatch<React.SetStateAction<{ [key: number]: string }>>;
 }
 
-// Перечисление для полей, по которым можно сортировать
 enum SortField {
     ID = 'id',
     STATUS = 'approvalRequest.approvalRequestStatus',
@@ -32,7 +32,7 @@ const ApprovalRequestTable: React.FC<TableProps> = ({ approvalRequests, onApprov
         return keys.reduce((acc, key) => acc[key], obj);
     };
 
-    // Function to sort leave requests
+    // Function to sort approval requests
     const sortedApprovalRequest: ApprovalRequest[] = [...approvalRequests].sort((a, b) => {
         const aValue: any = getFieldByPath(a, sortBy);
         const bValue: any = getFieldByPath(b, sortBy);
@@ -44,7 +44,6 @@ const ApprovalRequestTable: React.FC<TableProps> = ({ approvalRequests, onApprov
         }
     });
 
-    // Sort handler
     const handleSort = (field: SortField): void => {
         if (field === sortBy) {
             setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
@@ -115,7 +114,11 @@ const ApprovalRequestTable: React.FC<TableProps> = ({ approvalRequests, onApprov
                             <TableCell>{approvalRequest.approver?.fullName}</TableCell>
                             <TableCell><img src={approvalRequest.approver?.photo} alt="photo" /></TableCell>
                             <TableCell>{approvalRequest.approvalRequestStatus}</TableCell>
-                            <TableCell>{approvalRequest.leaveRequest.id}</TableCell>
+                            <TableCell>
+                                <Link to={`/leave-request-details/${approvalRequest.leaveRequest.id}`}>
+                                    {approvalRequest.leaveRequest.id}
+                                </Link>
+                            </TableCell>
 
                             {approvalRequest.approvalRequestStatus === Status.New ?
                                 (<TableCell><TextField variant="outlined" size="small" placeholder="Enter comment" value={comments[approvalRequest.id] || ""} onChange={(e) => handleCommentChange(approvalRequest.id, e.target.value)} /></TableCell>) :

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Employee } from '../types/Emloyees';
+import { Employee } from '../../types/Emloyees';
 import { Table, TableHead, TableBody, TableRow, TableCell, TableContainer, TableSortLabel, Button } from '@mui/material';
-import { UserType } from '../types/User';
-import { RootState } from '../redux/store';
+import { UserType } from '../../types/User';
+import { RootState } from '../../redux/store';
 import { useSelector } from 'react-redux';
 
 interface TableProps {

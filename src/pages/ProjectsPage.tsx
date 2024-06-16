@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ProjectTable from "../Components/ProjectTable";
+import ProjectTable from "../Components/Tables/ProjectTable";
 import { Project } from "../types/Project";
 import { useGetAllProjetsQuery } from "../services/ProjectService";
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useGetAllManagersQuery } from "../services/ManagerService";
 import { BaseManager } from "../types/Emloyees";
-import ManagersTable from "../Components/ManagersTable";
+import ManagersTable from "../Components/Tables/ManagersTable";
 
 const ManagersPage = () => {
 

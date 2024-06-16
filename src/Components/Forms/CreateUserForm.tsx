@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { ICreateUserModel } from "../types/User";
+import { ICreateUserModel } from "../../types/User";
 
 interface ICreateUserFormProps {
     onSubmit: (formData: FormData) => void;

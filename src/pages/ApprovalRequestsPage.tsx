@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { ApprovalRequest, ApprovalUpdateRequest, Status } from "../types/ApprovalRequest";
+import { ApprovalRequest,  Status } from "../types/ApprovalRequest";
 import { useApproveRequestMutation, useDeclineRequestMutation, useGetAllApprovalRequestQuery } from "../services/ApprovalRequestService";
-import ApprovalRequestTable from "../Components/ApprovalRequestTable";
-import { BaseQueryError } from "@reduxjs/toolkit/dist/query/baseQueryTypes";
+import ApprovalRequestTable from "../Components/Tables/ApprovalRequestTable";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 
 const ApprovalRequestsPage = () => {

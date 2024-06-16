@@ -1,12 +1,11 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useActions } from "../Hooks/storeHook";
 import { ILoginData } from "../types/User";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useLoginMutation } from "../services/authService";
 import { IAuthInformation } from "../types/AuthInfo";
 import styles from "../scss/authPage.module.scss";
-import { Alert, Button, Checkbox, CircularProgress, Paper, TextField, Typography } from "@mui/material";
+import { Button, Checkbox,  Paper, TextField, Typography } from "@mui/material";
 
 
 const AuthPage = () => {

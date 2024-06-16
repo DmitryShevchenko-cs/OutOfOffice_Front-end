@@ -1,5 +1,5 @@
 import React from "react";
-import CreateUserForm from "../Components/CreateUserForm";
+import CreateUserForm from "../Components/Forms/CreateUserForm";
 
 const CreateUserPage = () => {
     const handleSubmit = async (formData: FormData) => {

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Project } from '../types/Project';
+import { Project } from '../../types/Project';
 import { Table, TableHead, TableBody, TableRow, TableCell, TableContainer, TableSortLabel, Button } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
-import { UserType } from '../types/User';
+import { RootState } from '../../redux/store';
+import { UserType } from '../../types/User';
 
 interface TableProps {
     projects: Project[];

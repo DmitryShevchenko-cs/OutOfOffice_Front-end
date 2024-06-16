@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import LeaveRequestTable from "../Components/LeaveRequestTable";
+import LeaveRequestTable from "../Components/Tables/LeaveRequestTable";
 import { useGetAllLeaveRequestsQuery } from "../services/LeaveRequestService";
 import { LeaveRequest } from "../types/LeaveRequest";
 
