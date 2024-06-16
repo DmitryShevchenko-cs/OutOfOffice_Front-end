@@ -117,14 +117,23 @@ const LeaveRequestTable: React.FC<TableProps> = ({ leaveRequests, onEdit, onDele
                             </TableSortLabel>
                         </TableCell>
                         <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
-                                <TableSortLabel
-                                    active={sortBy === SortField.APPROVAL_STATUS}
-                                    direction={sortBy === SortField.APPROVAL_STATUS ? sortDirection : 'asc'}
-                                    onClick={() => handleSort(SortField.APPROVAL_STATUS)}
-                                >
-                                    Status
-                                </TableSortLabel>
-                            </TableCell>
+                            <TableSortLabel
+                                active={sortBy === SortField.APPROVAL_STATUS}
+                                direction={sortBy === SortField.APPROVAL_STATUS ? sortDirection : 'asc'}
+                                onClick={() => handleSort(SortField.APPROVAL_STATUS)}
+                            >
+                                Status
+                            </TableSortLabel>
+                        </TableCell>
+                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
+                            <TableSortLabel
+                                active={sortBy === SortField.APPROVAL_STATUS}
+                                direction={sortBy === SortField.APPROVAL_STATUS ? sortDirection : 'asc'}
+                                onClick={() => handleSort(SortField.APPROVAL_STATUS)}
+                            >
+                                Approval Status
+                            </TableSortLabel>
+                        </TableCell>
                         {canEditOrDelete(role) && <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>Actions</TableCell>}
                     </TableRow>
                 </TableHead>
@@ -138,6 +147,7 @@ const LeaveRequestTable: React.FC<TableProps> = ({ leaveRequests, onEdit, onDele
                             <TableCell>{leaveRequest.absenceReason.reasonDescription}</TableCell>
                             <TableCell>{leaveRequest.comment}</TableCell>
                             <TableCell>{leaveRequest.status}</TableCell>
+                            <TableCell>{leaveRequest.approvalRequest.approvalRequestStatus}</TableCell>
                             {canEditOrDelete(role) && (
                                 <TableCell>
                                     <Button onClick={() => onEdit(leaveRequest.id)}>Edit</Button>

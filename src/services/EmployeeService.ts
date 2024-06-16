@@ -17,7 +17,20 @@ export const Api = api.injectEndpoints({
           },
         }),
     }),
+    updateEmployee: builder.query<null, null>({
+      query: () => ({
+        url: "/api/employee",
+        method: HttpMethodType.GET,
+        responseHandler: async (response) => {
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP error! Status: ${response.status}, ${errorText}`);
+            }
+            return response.json();
+        },
+      }),
+  }),
   }),
 });
 
-export const { useGetAllEmployeesQuery } = Api;
+export const { useGetAllEmployeesQuery, useUpdateEmployeeQuery } = Api;

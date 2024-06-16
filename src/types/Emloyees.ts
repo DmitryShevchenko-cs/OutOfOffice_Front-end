@@ -2,17 +2,17 @@ import { UserType } from "./User";
 import { Position, Subdivision } from "./selections";
 
 export interface BaseEmployee{
-    id: number;
-    fullName: string;
-    photo: string;
+    id: number
+    fullName: string
+    photo: string
 }
 
 export interface Employee extends BaseEmployee {
-    subdivision: Subdivision;
-    position: Position;
-    status: boolean;
-    outOfOfficeBalance: number;
-    hrManager: BaseManager | null;
+    subdivision: Subdivision
+    position: Position
+    status: boolean
+    outOfOfficeBalance: number
+    hrManager: BaseManager | null
 }
 
 export interface BaseManager extends BaseEmployee{

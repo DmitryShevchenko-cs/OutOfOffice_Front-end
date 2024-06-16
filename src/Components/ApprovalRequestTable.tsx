@@ -1,39 +1,41 @@
 import React, { useState } from 'react';
-import { Table, TableHead, TableBody, TableRow, TableCell, TableContainer, TableSortLabel, Button } from '@mui/material';
-import { ApprovalRequest } from '../types/ApprovalRequest';
+import { Table, TableHead, TableBody, TableRow, TableCell, TableContainer, TableSortLabel, Button, TextField } from '@mui/material';
+import { ApprovalRequest, Status } from '../types/ApprovalRequest';
 import { UserType } from '../types/User';
 import { RootState } from '../redux/store';
 import { useSelector } from 'react-redux';
 
 interface TableProps {
     approvalRequests: ApprovalRequest[];
-    onEdit: (id: number) => void;
-    onDelete: (id: number) => void;
+    onApprove: (id: number, comment: string) => void;
+    onDecline: (id: number, comment: string) => void;
+    comments: { [key: number]: string };
+    setComments: React.Dispatch<React.SetStateAction<{ [key: number]: string }>>;
 }
 
 // Перечисление для полей, по которым можно сортировать
 enum SortField {
     ID = 'id',
-    STATUS = 'approvalRequest.status',
+    STATUS = 'approvalRequest.approvalRequestStatus',
     COMMENT = 'approvalRequest.comment',
     APPROVER_NAME = 'approvalRequest.approver?.fullname',
 }
 
-const ApprovalRequestTable: React.FC<TableProps> = ({ approvalRequests, onEdit, onDelete }) => {
+const ApprovalRequestTable: React.FC<TableProps> = ({ approvalRequests, onApprove, onDecline, comments, setComments }) => {
     const [sortBy, setSortBy] = useState<SortField>(SortField.ID);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-    const role = useSelector((state: RootState) => state.auth.role); 
-    
+    const role: string = useSelector((state: RootState) => state.auth.role);
+
     // Helper function to get the value by path
     const getFieldByPath = (obj: any, path: string): any => {
-        const keys = path.split('.');
+        const keys: string[] = path.split('.');
         return keys.reduce((acc, key) => acc[key], obj);
     };
 
     // Function to sort leave requests
-    const sortedApprovalRequest = [...approvalRequests].sort((a, b) => {
-        const aValue = getFieldByPath(a, sortBy);
-        const bValue = getFieldByPath(b, sortBy);
+    const sortedApprovalRequest: ApprovalRequest[] = [...approvalRequests].sort((a, b) => {
+        const aValue: any = getFieldByPath(a, sortBy);
+        const bValue: any = getFieldByPath(b, sortBy);
 
         if (sortDirection === 'asc') {
             return aValue > bValue ? 1 : aValue < bValue ? -1 : 0;
@@ -43,7 +45,7 @@ const ApprovalRequestTable: React.FC<TableProps> = ({ approvalRequests, onEdit, 
     });
 
     // Sort handler
-    const handleSort = (field: SortField) => {
+    const handleSort = (field: SortField): void => {
         if (field === sortBy) {
             setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
         } else {
@@ -52,16 +54,20 @@ const ApprovalRequestTable: React.FC<TableProps> = ({ approvalRequests, onEdit, 
         }
     };
 
-    const canEditOrDelete = (role: string) => {
+    const canEditOrDelete = (role: string): boolean => {
         return role === UserType.Admin || role === UserType.HrManager || role === UserType.HrManager;
+    };
+
+    const handleCommentChange = (id: number, comment: string): void => {
+        setComments(prevComments => ({ ...prevComments, [id]: comment }));
     };
 
     return (
         <TableContainer>
-            <Table sx={{backgroundColor:"white", borderRadius:"10px"}}>
+            <Table sx={{ backgroundColor: "white", borderRadius: "10px" }}>
                 <TableHead>
                     <TableRow>
-                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)"}}>
+                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
                             <TableSortLabel
                                 active={sortBy === SortField.ID}
                                 direction={sortBy === SortField.ID ? sortDirection : 'asc'}
@@ -79,7 +85,7 @@ const ApprovalRequestTable: React.FC<TableProps> = ({ approvalRequests, onEdit, 
                                 Approver
                             </TableSortLabel>
                         </TableCell>
-                        <TableCell  sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>Photo</TableCell>
+                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>Photo</TableCell>
                         <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
                             <TableSortLabel
                                 active={sortBy === SortField.STATUS}
@@ -98,33 +104,30 @@ const ApprovalRequestTable: React.FC<TableProps> = ({ approvalRequests, onEdit, 
                                 Leave Request Id
                             </TableSortLabel>
                         </TableCell>
-                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
-                            <TableSortLabel
-                                active={sortBy === SortField.COMMENT}
-                                direction={sortBy === SortField.COMMENT ? sortDirection : 'asc'}
-                                onClick={() => handleSort(SortField.COMMENT)}
-                            >
-                                Comment
-                            </TableSortLabel>
-                        </TableCell>
+                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>Comment</TableCell>
                         {canEditOrDelete(role) && <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>Actions</TableCell>}
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {sortedApprovalRequest.map((approvalRequest) => (
+                    {sortedApprovalRequest.map((approvalRequest: ApprovalRequest) => (
                         <TableRow key={approvalRequest.id}>
                             <TableCell>{approvalRequest.id}</TableCell>
                             <TableCell>{approvalRequest.approver?.fullName}</TableCell>
                             <TableCell><img src={approvalRequest.approver?.photo} alt="photo" /></TableCell>
-                            <TableCell>{approvalRequest.status}</TableCell>
+                            <TableCell>{approvalRequest.approvalRequestStatus}</TableCell>
                             <TableCell>{approvalRequest.leaveRequest.id}</TableCell>
-                            <TableCell>{approvalRequest.comment}</TableCell>
-                            {canEditOrDelete(role) && (
-                                <TableCell>
-                                    <Button onClick={() => onEdit(approvalRequest.id)}>Edit</Button>
-                                    <Button sx={{color:"red"}} onClick={() => onDelete(approvalRequest.id)}>Delete</Button>
-                                </TableCell>
-                            )}
+
+                            {approvalRequest.approvalRequestStatus === Status.New ?
+                                (<TableCell><TextField variant="outlined" size="small" placeholder="Enter comment" value={comments[approvalRequest.id] || ""} onChange={(e) => handleCommentChange(approvalRequest.id, e.target.value)} /></TableCell>) :
+                                (<TableCell>{approvalRequest.comment}</TableCell>)}
+                            <TableCell>
+                                {canEditOrDelete(role) && approvalRequest.approvalRequestStatus === Status.New && (
+                                    <>
+                                        <Button sx={{ color: "green", border: "1px solid green", marginRight: "5px" }} onClick={() => onApprove(approvalRequest.id, comments[approvalRequest.id] || "")}>Approve</Button>
+                                        <Button sx={{ color: "red", border: "1px solid red" }} onClick={() => onDecline(approvalRequest.id, comments[approvalRequest.id] || "")}>Decline</Button>
+                                    </>
+                                )}
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
@@ -134,3 +137,4 @@ const ApprovalRequestTable: React.FC<TableProps> = ({ approvalRequests, onEdit, 
 };
 
 export default ApprovalRequestTable;
+

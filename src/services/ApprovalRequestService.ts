@@ -1,12 +1,12 @@
 import { api } from "../api/api";
+import { ApprovalRequest, ApprovalUpdateRequest } from "../types/ApprovalRequest";
 import { HttpMethodType } from "../types/HttpInfo";
-import { LeaveRequest, UpdateApprovalRequest } from "../types/LeaveRequest";
 
 export const Api = api.injectEndpoints({
   endpoints: (builder) => ({
-    getAllLeaveRequests: builder.query<LeaveRequest[], null>({
+    getAllApprovalRequest: builder.query<ApprovalRequest[], null>({
       query: () => ({
-        url: "/api/leaverequest",
+        url: "/api/ApprovalRequest",
         method: HttpMethodType.GET,
         responseHandler: async (response) => {
           if (!response.ok) {
@@ -17,10 +17,10 @@ export const Api = api.injectEndpoints({
         },
       }),
     }),
-    updateLeaveRequest: builder.query<null, UpdateApprovalRequest>({
-      query: (data) => ({
+    approveRequest: builder.mutation({
+      query: (data: ApprovalUpdateRequest) => ({
         body: data,
-        url: "/api/leaverequest",
+        url: "/api/ApprovalRequest/approve",
         method: HttpMethodType.PUT,
         responseHandler: async (response) => {
           if (!response.ok) {
@@ -31,11 +31,11 @@ export const Api = api.injectEndpoints({
         },
       }),
     }),
-    GetLeaveRequest: builder.query<null, number>({
-      query: (requestId) => ({
-        body: requestId,
-        url: `/api/leaverequest/${requestId}`,
-        method: HttpMethodType.GET,
+    declineRequest: builder.mutation({
+      query: (data: ApprovalUpdateRequest) => ({
+        body: data,
+        url: "/api/ApprovalRequest/decline",
+        method: HttpMethodType.PUT,
         responseHandler: async (response) => {
           if (!response.ok) {
             const errorText = await response.text();
@@ -48,4 +48,4 @@ export const Api = api.injectEndpoints({
   }),
 });
 
-export const { useGetAllLeaveRequestsQuery, useUpdateLeaveRequestQuery } = Api;
+export const { useGetAllApprovalRequestQuery, useApproveRequestMutation, useDeclineRequestMutation } = Api;

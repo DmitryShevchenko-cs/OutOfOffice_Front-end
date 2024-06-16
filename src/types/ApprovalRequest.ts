@@ -2,10 +2,10 @@ import { BaseManager } from "./Emloyees";
 import { LeaveRequest } from "./LeaveRequest";
 
 export interface ApprovalRequest {
-    id: number,
+    id: number
     approver: BaseManager | null
     leaveRequest : LeaveRequest
-    status: Status
+    approvalRequestStatus: Status
     comment: string | null
 }
 export enum Status {
@@ -13,3 +13,8 @@ export enum Status {
     Approved = "Approved",
     Decline = "Decline"
 } 
+
+export interface ApprovalUpdateRequest {
+    id: number
+    comment: string | null
+}
