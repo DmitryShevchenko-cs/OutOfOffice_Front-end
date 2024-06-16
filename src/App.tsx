@@ -12,7 +12,7 @@ import LeaveRequestsPage from './pages/LeaveRequestsPage';
 import ManagersPage from './pages/ManagersPage';
 import ProjectsPage from './pages/ProjectsPage';
 import CreateUserPage from './pages/CreateUserPage';
-import Pagerrr from './pages/Pagerrr';
+import Pagerrr from './pages/LeaveRequestDetails';
 import { UserType } from './types/User';
 import LeaveRequestDetails from './Components/DetailInfoComponents/LeaveRequestDetails';
 
