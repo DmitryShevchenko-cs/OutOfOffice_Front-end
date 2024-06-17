@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import ProjectTable from "../Components/Tables/ProjectTable";
 import { Project } from "../types/Project";
-import { useGetAllProjetsQuery } from "../services/ProjectService";
+import { useDeactivateProjectMutation, useGetAllProjetsQuery } from "../services/ProjectService";
 
 const ProjectsPage = () => {
 
   const {data: projectsList } = useGetAllProjetsQuery(null);
-
   const [projects, setProjects] = useState<Project[]>([])
+
+  const [deleteProject] = useDeactivateProjectMutation();
 
   useEffect(() => {
     if (projectsList) {
@@ -15,14 +16,13 @@ const ProjectsPage = () => {
     }
   }, [projectsList]);
 
-  const handleEdit = (id: number) => {
-    // Реализация редактирования
-    
-  };
-
-  const handleDelete = (id: number) => {
-    // Реализация удаления
-    setProjects(projects.filter((project) => project.id !== id));
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteProject(id).unwrap();
+    }catch (error: any) {
+      console.error('Failed to approve request:', error.data || error.message);
+    }
+    window.location.reload();
   };
   
   return (
@@ -30,7 +30,7 @@ const ProjectsPage = () => {
       <div>
         <h1>Projects Page</h1>
       </div>     
-      <ProjectTable projects={projects} onEdit={handleEdit} onDelete={handleDelete}/>
+      <ProjectTable projects={projects} onDelete={handleDelete}/>
     </>
   );
 };

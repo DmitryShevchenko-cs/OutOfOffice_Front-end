@@ -7,7 +7,6 @@ import { RootState } from '../../redux/store';
 
 interface TableProps {
     managers: BaseManager[];
-    onEdit: (id: number) => void;
     onDelete: (id: number) => void;
 }
 
@@ -17,7 +16,7 @@ enum SortField {
     FULL_NAME = 'fullName'
 }
 
-const EmployeeTable: React.FC<TableProps> = ({ managers, onEdit, onDelete }) => {
+const EmployeeTable: React.FC<TableProps> = ({ managers, onDelete }) => {
     const [sortBy, setSortBy] = useState<SortField>(SortField.ID);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
     const role = useSelector((state: RootState) => state.auth.role);
@@ -100,8 +99,8 @@ const EmployeeTable: React.FC<TableProps> = ({ managers, onEdit, onDelete }) => 
                             <TableCell>{employee.role}</TableCell>
                             {canEditOrDelete(role) && (
                                 <TableCell>
-                                    <Button onClick={() => onEdit(employee.id)}>Edit</Button>
-                                    <Button sx={{ color: "red" }} onClick={() => onDelete(employee.id)}>Delete</Button>
+                                    <Button sx={{border: "1px solid blue", marginRight: "5px" }} >Edit</Button>
+                                    <Button sx={{ border: "1px solid red", color: "red" }} onClick={() => onDelete(employee.id)}>Delete</Button>
                                 </TableCell>
                             )}
                         </TableRow>

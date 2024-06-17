@@ -9,8 +9,13 @@ interface Props {
 const LeaveRequestDetails: React.FC<Props> = ({ id }) => {
 
   const { data: request, isLoading } = useGetLeaveRequestQuery(Number(id));
+  if (!request) {
+    return <div>Project data not found</div>;
+  }
+
   if(isLoading)
     return<div>Loading...</div>
+  
   return (
     <Paper elevation={3} style={{ padding: 20, marginTop: 20 }}>
       <Typography variant="h5" gutterBottom>

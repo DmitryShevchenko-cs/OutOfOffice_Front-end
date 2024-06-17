@@ -4,10 +4,10 @@ import { Table, TableHead, TableBody, TableRow, TableCell, TableContainer, Table
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { UserType } from '../../types/User';
+import { Link } from 'react-router-dom';
 
 interface TableProps {
     projects: Project[];
-    onEdit: (id: number) => void;
     onDelete: (id: number) => void;
 }
 
@@ -21,7 +21,7 @@ enum SortField {
     STATUS = 'status',
 }
 
-const EmployeeTable: React.FC<TableProps> = ({ projects, onEdit, onDelete }) => {
+const EmployeeTable: React.FC<TableProps> = ({ projects, onDelete }) => {
     const [sortBy, setSortBy] = useState<SortField>(SortField.ID);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
     const role = useSelector((state: RootState) => state.auth.role); 
@@ -123,7 +123,11 @@ const EmployeeTable: React.FC<TableProps> = ({ projects, onEdit, onDelete }) => 
                 <TableBody>
                     {sortedProjects.map((project) => (
                         <TableRow key={project.id}>
-                            <TableCell>{project.id}</TableCell>
+                            <TableCell>
+                                <Link to={`/project/${project.id}`}>
+                                    {project.id}
+                                </Link>
+                            </TableCell>
                             <TableCell>{project.projectManager.fullName}</TableCell>
                             <TableCell>{project.projectType.name}</TableCell>
                             <TableCell>{new Date(project.startDate).toLocaleDateString()}</TableCell>
@@ -132,8 +136,8 @@ const EmployeeTable: React.FC<TableProps> = ({ projects, onEdit, onDelete }) => 
                             <TableCell>{project.status ? 'Active' : 'Inactive'}</TableCell>
                             {canEditOrDelete(role) && (
                                 <TableCell>
-                                    <Button onClick={() => onEdit(project.id)}>Edit</Button>
-                                    <Button sx={{color:"red"}} onClick={() => onDelete(project.id)}>Delete</Button>
+                                    <Button sx={{border: "1px solid blue", marginRight: "5px" }}>Edit</Button>
+                                    <Button sx={{ border: "1px solid red", color:"red"}} onClick={() => onDelete(project.id)}>Deactivate</Button>
                                 </TableCell>
                             )}
                         </TableRow>

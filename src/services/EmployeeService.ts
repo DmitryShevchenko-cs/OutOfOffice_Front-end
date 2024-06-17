@@ -17,20 +17,21 @@ export const Api = api.injectEndpoints({
           },
         }),
     }),
-    updateEmployee: builder.query<null, null>({
-      query: () => ({
-        url: "/api/employee",
-        method: HttpMethodType.GET,
+
+    deactivateEmployee: builder.mutation({
+      query: (requestId:number) => ({
+        url: `/api/employee/${requestId}`,
+        method: HttpMethodType.PUT,
         responseHandler: async (response) => {
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`HTTP error! Status: ${response.status}, ${errorText}`);
-            }
-            return response.json();
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP error! Status: ${response.status}, ${errorText}`);
+          }
+          return response.json();
         },
       }),
-  }),
+    }),
   }),
 });
 
-export const { useGetAllEmployeesQuery, useUpdateEmployeeQuery } = Api;
+export const { useGetAllEmployeesQuery, useDeactivateEmployeeMutation } = Api;

@@ -166,12 +166,13 @@ const LeaveRequestTable: React.FC<TableProps> = ({ leaveRequests, onDelete }) =>
                             {canEditOrDelete(role) && (
                                 <TableCell>
                                     <Button
+                                        sx={{ border: "1px solid blue", marginRight: "5px" }}
                                         component={Link}
                                         to={`/update-leave-request/${leaveRequest.id}`}
                                     >
                                         Edit
                                     </Button>
-                                    <Button sx={{ color: "red" }} onClick={() => onDelete(leaveRequest.id)}>Delete</Button>
+                                    <Button sx={{ color: "red", border: "1px solid red"}} onClick={() => onDelete(leaveRequest.id)}>Delete</Button>
                                 </TableCell>
                             )}
                         </TableRow>

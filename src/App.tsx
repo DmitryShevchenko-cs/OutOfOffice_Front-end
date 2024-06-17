@@ -14,6 +14,7 @@ import LeaveRequestDetailsPage from './pages/LeaveRequestDetailsPage';
 import { UserType } from './types/User';
 import UpdateLeaveRequestPage from './pages/UpdateLeaveRequestPage';
 import CreateLeaveRequestPage from './pages/CreateLeaveRequestPage';
+import ProjectDetailsPage from './pages/ProjectDetailsPage';
 
 function App() {
   
@@ -36,6 +37,9 @@ function App() {
         
         <Route path="/projects" element={<ProtectedRoute allowedRoles={[UserType.Admin, UserType.ProjectManager, UserType.HrManager, UserType.Employee]} />}>
           <Route index element={<ProjectsPage />} />
+        </Route>
+        <Route path="/project/:id" element={<ProtectedRoute allowedRoles={[UserType.Admin, UserType.HrManager, UserType.Employee, UserType.ProjectManager]}/>}>
+          <Route index element={<ProjectDetailsPage />} />
         </Route>
         
         <Route path="/create-user" element={<ProtectedRoute allowedRoles={[UserType.Admin]} />}>
