@@ -4,10 +4,10 @@ import { LeaveRequest } from '../../types/LeaveRequest';
 import { UserType } from '../../types/User';
 import { RootState } from '../../redux/store';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 interface TableProps {
     leaveRequests: LeaveRequest[];
-    onEdit: (id: number) => void;
     onDelete: (id: number) => void;
 }
 
@@ -23,11 +23,20 @@ enum SortField {
     STATUS = 'status',
 }
 
-const LeaveRequestTable: React.FC<TableProps> = ({ leaveRequests, onEdit, onDelete }) => {
+const fetchLeaveRequests = async () => {
+    const response = await fetch('/api/leave-requests');
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return response.json();
+};
+
+const LeaveRequestTable: React.FC<TableProps> = ({ leaveRequests, onDelete }) => {
     const [sortBy, setSortBy] = useState<SortField>(SortField.ID);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
     const role = useSelector((state: RootState) => state.auth.role);
 
+    
     // Helper function to get the value by path
     const getFieldByPath = (obj: any, path: string): any => {
         const keys = path.split('.');
@@ -38,10 +47,10 @@ const LeaveRequestTable: React.FC<TableProps> = ({ leaveRequests, onEdit, onDele
     const sortedLeaveRequests = [...leaveRequests].sort((a, b) => {
         const aValue: any = getFieldByPath(a, sortBy);
         const bValue: any = getFieldByPath(b, sortBy);
-    
+
         if (aValue === undefined) return 1;
         if (bValue === undefined) return -1;
-    
+
         if (sortDirection === 'asc') {
             return aValue > bValue ? 1 : aValue < bValue ? -1 : 0;
         } else {
@@ -156,7 +165,12 @@ const LeaveRequestTable: React.FC<TableProps> = ({ leaveRequests, onEdit, onDele
                             <TableCell>{leaveRequest.approvalRequest.approvalRequestStatus}</TableCell>
                             {canEditOrDelete(role) && (
                                 <TableCell>
-                                    <Button onClick={() => onEdit(leaveRequest.id)}>Edit</Button>
+                                    <Button
+                                        component={Link}
+                                        to={`/update-leave-request/${leaveRequest.id}`}
+                                    >
+                                        Edit
+                                    </Button>
                                     <Button sx={{ color: "red" }} onClick={() => onDelete(leaveRequest.id)}>Delete</Button>
                                 </TableCell>
                             )}

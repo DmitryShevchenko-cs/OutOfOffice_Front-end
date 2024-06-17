@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import LeaveRequestTable from "../Components/Tables/LeaveRequestTable";
 import { useDelLeaveRequestMutation, useGetAllLeaveRequestsQuery } from "../services/LeaveRequestService";
 import { LeaveRequest } from "../types/LeaveRequest";
+import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const LeaveRequestsPage = () => {
 
@@ -16,11 +18,6 @@ const LeaveRequestsPage = () => {
       setleaveRequests(leaveRequestList);
     }
   }, [leaveRequestList]);
-
-  const handleEdit = (id: number) => {
-    // Реализация редактирования
-    
-  };
 
   const handleDelete = async (id: number) => {
     try {
@@ -39,9 +36,19 @@ const LeaveRequestsPage = () => {
       <div>
         <h1>Leave Requests Page</h1>
       </div>     
-      <LeaveRequestTable leaveRequests={leaveRequests} onEdit={handleEdit} onDelete={handleDelete} />
+      <Button
+        component={Link}
+        to="/create-leave-request"
+        variant="contained"
+        color="primary"
+        sx={{ mt: 2, mb: 2 }} // Пример использования sx для простой настройки отступов
+      >
+        Create Leave Request
+      </Button>
+      <LeaveRequestTable leaveRequests={leaveRequests} onDelete={handleDelete} />
     </>
   );
 };
 
 export default LeaveRequestsPage;
+ 

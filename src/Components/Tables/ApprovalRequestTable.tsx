@@ -125,10 +125,12 @@ const ApprovalRequestTable: React.FC<TableProps> = ({ approvalRequests, onApprov
                                     {approvalRequest.leaveRequest.id}
                                 </Link>
                             </TableCell>
-
-                            {approvalRequest.approvalRequestStatus === Status.New ?
+                             {/*input or comment*/}
+                            {approvalRequest.approvalRequestStatus === Status.New && role !== UserType.Employee?
                                 (<TableCell><TextField variant="outlined" size="small" placeholder="Enter comment" value={comments[approvalRequest.id] || ""} onChange={(e) => handleCommentChange(approvalRequest.id, e.target.value)} /></TableCell>) :
                                 (<TableCell>{approvalRequest.comment}</TableCell>)}
+                            
+                            {/*Actions*/}
                             <TableCell>
                                 {canEditOrDelete(role) && approvalRequest.approvalRequestStatus === Status.New && (
                                     <>

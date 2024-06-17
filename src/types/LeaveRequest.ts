@@ -31,3 +31,11 @@ export interface UpdateLeaveRequest {
     status: LeaveRequestStatus
     comment: string | null
 }
+
+export interface CreateLeaveRequest {
+    absenceReasonId: number
+    approverId : number
+    startDate: string
+    endDate: string
+    comment: string | null
+}

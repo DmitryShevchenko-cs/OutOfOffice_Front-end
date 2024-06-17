@@ -1,6 +1,6 @@
 import { api } from "../api/api";
 import { HttpMethodType } from "../types/HttpInfo";
-import { LeaveRequest, UpdateLeaveRequest } from "../types/LeaveRequest";
+import { CreateLeaveRequest, LeaveRequest, UpdateLeaveRequest } from "../types/LeaveRequest";
 
 export const Api = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -17,11 +17,11 @@ export const Api = api.injectEndpoints({
         },
       }),
     }),
-    updateLeaveRequest: builder.query<null, UpdateLeaveRequest>({
+    updateLeaveRequest: builder.mutation<null, UpdateLeaveRequest>({
       query: (data) => ({
-        body: data,
-        url: "/api/leaverequest",
+        url: `/api/leaverequest`,
         method: HttpMethodType.PUT,
+        body: data,
         responseHandler: async (response) => {
           if (!response.ok) {
             const errorText = await response.text();
@@ -46,9 +46,23 @@ export const Api = api.injectEndpoints({
     }),
 
     delLeaveRequest: builder.mutation({
-      query: (requestId) => ({
+      query: (requestId:number) => ({
         url: `/api/leaverequest/${requestId}`,
         method: HttpMethodType.DELETE,
+        responseHandler: async (response) => {
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP error! Status: ${response.status}, ${errorText}`);
+          }
+          return response.json();
+        },
+      }),
+    }),
+    createLeaveRequest: builder.mutation({
+      query: (data:CreateLeaveRequest) => ({
+        url: `/api/leaverequest`,
+        body:data,
+        method: HttpMethodType.POST,
         responseHandler: async (response) => {
           if (!response.ok) {
             const errorText = await response.text();
@@ -61,4 +75,4 @@ export const Api = api.injectEndpoints({
   }),
 });
 
-export const { useGetAllLeaveRequestsQuery, useUpdateLeaveRequestQuery, useGetLeaveRequestQuery, useDelLeaveRequestMutation} = Api;
+export const { useGetAllLeaveRequestsQuery, useUpdateLeaveRequestMutation, useGetLeaveRequestQuery, useDelLeaveRequestMutation, useCreateLeaveRequestMutation} = Api;

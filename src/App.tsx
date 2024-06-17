@@ -1,11 +1,9 @@
 import React from 'react';
 import './App.css';
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import AuthPage from './pages/AuthPage';
-import { useSelector } from 'react-redux';
 import { Layout, AuthLayout, ProtectedRoute } from './Components/Layout';
-import { RootState } from './redux/store';
 import ApprovalRequestsPage from './pages/ApprovalRequestsPage';
 import EmployeesPage from './pages/EmployeesPage';
 import LeaveRequestsPage from './pages/LeaveRequestsPage';
@@ -14,9 +12,8 @@ import ProjectsPage from './pages/ProjectsPage';
 import CreateUserPage from './pages/CreateUserPage';
 import LeaveRequestDetailsPage from './pages/LeaveRequestDetailsPage';
 import { UserType } from './types/User';
-import LeaveRequestDetails from './Components/DetailInfoComponents/LeaveRequestDetails';
-import UpdateLeaveRequestForm from './Components/Forms/UpdateLeaveRequestForm';
 import UpdateLeaveRequestPage from './pages/UpdateLeaveRequestPage';
+import CreateLeaveRequestPage from './pages/CreateLeaveRequestPage';
 
 function App() {
   
@@ -32,11 +29,7 @@ function App() {
         <Route path="/employees" element={<ProtectedRoute allowedRoles={[UserType.Admin, UserType.HrManager, UserType.ProjectManager]} />}>
           <Route index element={<EmployeesPage />} />
         </Route>
-        
-        <Route path="/leave-requests" element={<ProtectedRoute allowedRoles={[UserType.Admin, UserType.HrManager, UserType.Employee, UserType.ProjectManager]} />}>
-          <Route index element={<LeaveRequestsPage />} />
-        </Route>
-        
+                
         <Route path="/managers" element={<ProtectedRoute allowedRoles={[UserType.Admin]} />}>
           <Route index element={<ManagersPage />} />
         </Route>
@@ -49,12 +42,17 @@ function App() {
           <Route index element={<CreateUserPage />} />
         </Route>
 
+        <Route path="/leave-requests" element={<ProtectedRoute allowedRoles={[UserType.Admin, UserType.HrManager, UserType.Employee, UserType.ProjectManager]} />}>
+          <Route index element={<LeaveRequestsPage />} />
+        </Route>
         <Route path="/leave-request-details/:id" element={<ProtectedRoute allowedRoles={[UserType.Admin, UserType.HrManager, UserType.Employee, UserType.ProjectManager]}/>}>
           <Route index element={<LeaveRequestDetailsPage />} />
         </Route>
-
         <Route path="/update-leave-request/:id" element={<ProtectedRoute allowedRoles={[UserType.Employee]}/>}>
           <Route index element={<UpdateLeaveRequestPage />} />
+        </Route>
+        <Route path="/create-leave-request" element={<ProtectedRoute allowedRoles={[UserType.Employee]}/>}>
+          <Route index element={<CreateLeaveRequestPage />} />
         </Route>
       </Route>
       
