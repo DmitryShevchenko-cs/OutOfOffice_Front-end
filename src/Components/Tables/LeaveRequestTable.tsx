@@ -17,7 +17,10 @@ enum SortField {
     EMPLOYEE_NAME = 'employee.fullName',
     START_DATE = 'startDate',
     END_DATE = 'endDate',
-    APPROVAL_STATUS = 'approvalRequest.status',
+    APPROVAL_STATUS = 'approvalRequest.Status',
+    REASON = 'reason',
+    COMMENT = 'comment',
+    STATUS = 'status',
 }
 
 const LeaveRequestTable: React.FC<TableProps> = ({ leaveRequests, onEdit, onDelete }) => {
@@ -28,14 +31,17 @@ const LeaveRequestTable: React.FC<TableProps> = ({ leaveRequests, onEdit, onDele
     // Helper function to get the value by path
     const getFieldByPath = (obj: any, path: string): any => {
         const keys = path.split('.');
-        return keys.reduce((acc, key) => acc[key], obj);
+        return keys.reduce((acc, key) => acc && acc[key] !== undefined ? acc[key] : undefined, obj);
     };
 
     // Function to sort leave requests
     const sortedLeaveRequests = [...leaveRequests].sort((a, b) => {
-        const aValue = getFieldByPath(a, sortBy);
-        const bValue = getFieldByPath(b, sortBy);
-
+        const aValue: any = getFieldByPath(a, sortBy);
+        const bValue: any = getFieldByPath(b, sortBy);
+    
+        if (aValue === undefined) return 1;
+        if (bValue === undefined) return -1;
+    
         if (sortDirection === 'asc') {
             return aValue > bValue ? 1 : aValue < bValue ? -1 : 0;
         } else {
@@ -100,27 +106,27 @@ const LeaveRequestTable: React.FC<TableProps> = ({ leaveRequests, onEdit, onDele
                         </TableCell>
                         <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
                             <TableSortLabel
-                                active={sortBy === SortField.APPROVAL_STATUS}
-                                direction={sortBy === SortField.APPROVAL_STATUS ? sortDirection : 'asc'}
-                                onClick={() => handleSort(SortField.APPROVAL_STATUS)}
+                                active={sortBy === SortField.REASON}
+                                direction={sortBy === SortField.REASON ? sortDirection : 'asc'}
+                                onClick={() => handleSort(SortField.REASON)}
                             >
                                 Reason
                             </TableSortLabel>
                         </TableCell>
                         <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
                             <TableSortLabel
-                                active={sortBy === SortField.APPROVAL_STATUS}
-                                direction={sortBy === SortField.APPROVAL_STATUS ? sortDirection : 'asc'}
-                                onClick={() => handleSort(SortField.APPROVAL_STATUS)}
+                                active={sortBy === SortField.COMMENT}
+                                direction={sortBy === SortField.COMMENT ? sortDirection : 'asc'}
+                                onClick={() => handleSort(SortField.COMMENT)}
                             >
                                 Comment
                             </TableSortLabel>
                         </TableCell>
                         <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
                             <TableSortLabel
-                                active={sortBy === SortField.APPROVAL_STATUS}
-                                direction={sortBy === SortField.APPROVAL_STATUS ? sortDirection : 'asc'}
-                                onClick={() => handleSort(SortField.APPROVAL_STATUS)}
+                                active={sortBy === SortField.STATUS}
+                                direction={sortBy === SortField.STATUS ? sortDirection : 'asc'}
+                                onClick={() => handleSort(SortField.STATUS)}
                             >
                                 Status
                             </TableSortLabel>

@@ -1,0 +1,24 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+
+.root {
+    width: 40%;
+    padding: 20px;
+    border: 1px solid #8b8787;
+    margin-top: 20px;
+}
+
+.field {
+    margin-bottom: 10px;
+}
+
+.title {
+    text-align: center;
+    font-weight: bold;
+ 
+}

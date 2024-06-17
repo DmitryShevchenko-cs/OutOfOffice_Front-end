@@ -8,7 +8,7 @@ export interface LeaveRequest {
     absenceReason : AbsenceReason
     startDate: Date
     endDate: Date
-    status: string
+    status: LeaveRequestStatus
     comment: string
 }
 
@@ -22,12 +22,12 @@ export enum LeaveRequestStatus{
     Canceled = "Canceled"
 }
 
-export interface UpdateApprovalRequest {
+export interface UpdateLeaveRequest {
     id: number
     absenceReasonId: number
-    approvalRequestId : number
-    startDate: Date
-    endDate: Date
+    approverId : number
+    startDate: string
+    endDate: string
     status: LeaveRequestStatus
     comment: string | null
 }

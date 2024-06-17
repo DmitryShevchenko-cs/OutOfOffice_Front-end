@@ -12,9 +12,11 @@ import LeaveRequestsPage from './pages/LeaveRequestsPage';
 import ManagersPage from './pages/ManagersPage';
 import ProjectsPage from './pages/ProjectsPage';
 import CreateUserPage from './pages/CreateUserPage';
-import Pagerrr from './pages/LeaveRequestDetails';
+import LeaveRequestDetailsPage from './pages/LeaveRequestDetailsPage';
 import { UserType } from './types/User';
 import LeaveRequestDetails from './Components/DetailInfoComponents/LeaveRequestDetails';
+import UpdateLeaveRequestForm from './Components/Forms/UpdateLeaveRequestForm';
+import UpdateLeaveRequestPage from './pages/UpdateLeaveRequestPage';
 
 function App() {
   
@@ -48,7 +50,11 @@ function App() {
         </Route>
 
         <Route path="/leave-request-details/:id" element={<ProtectedRoute allowedRoles={[UserType.Admin, UserType.HrManager, UserType.Employee, UserType.ProjectManager]}/>}>
-          <Route index element={<Pagerrr />} />
+          <Route index element={<LeaveRequestDetailsPage />} />
+        </Route>
+
+        <Route path="/update-leave-request/:id" element={<ProtectedRoute allowedRoles={[UserType.Employee]}/>}>
+          <Route index element={<UpdateLeaveRequestPage />} />
         </Route>
       </Route>
       

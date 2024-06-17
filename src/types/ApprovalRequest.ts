@@ -3,7 +3,7 @@ import { LeaveRequest } from "./LeaveRequest";
 
 export interface ApprovalRequest {
     id: number
-    approver: BaseManager | null
+    approver: BaseManager
     leaveRequest : LeaveRequest
     approvalRequestStatus: Status
     comment: string | null

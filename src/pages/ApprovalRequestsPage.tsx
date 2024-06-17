@@ -5,7 +5,7 @@ import ApprovalRequestTable from "../Components/Tables/ApprovalRequestTable";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 
 const ApprovalRequestsPage = () => {
-  const { data: approvalRequestList } = useGetAllApprovalRequestQuery(null);
+  const { data: approvalRequestList, isLoading } = useGetAllApprovalRequestQuery(null);
   const [approvalRequests, setApprovalRequests] = useState<ApprovalRequest[]>([]);
   const [approveRequest] = useApproveRequestMutation();
   const [declineRequest] = useDeclineRequestMutation();
@@ -58,15 +58,8 @@ const ApprovalRequestsPage = () => {
       setApprovalRequests(updatedRequests);
       setComments(prevComments => ({ ...prevComments, [id]: '' }));
     } catch (error: any) {
-      //catch exception from backend
-      if (error.data && error.data.startsWith('OutOfOffice.BLL.Exceptions.OutOfBalanceLimitException')) {
-        setErrorMessage('Employee doesn\'t have enough days on balance');
-        setShowErrorModal(true);
-      } else {
         console.error('Failed to approve request:', error.data || error.message);
-        alert(`Ошибка: ${error.data || error.message}`);
       }
-    }
   };
 
   const handleCloseErrorModal = () => {
@@ -74,6 +67,10 @@ const ApprovalRequestsPage = () => {
     setErrorMessage('');
   };
 
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <>
       <div>

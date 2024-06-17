@@ -18,7 +18,8 @@ enum SortField {
     ID = 'id',
     STATUS = 'approvalRequest.approvalRequestStatus',
     COMMENT = 'approvalRequest.comment',
-    APPROVER_NAME = 'approvalRequest.approver?.fullname',
+    APPROVER_NAME = 'approvalRequest.approver.fullname',
+    LEAVE_REQUEST_ID = 'approvalRequest.leaveRequest.id',
 }
 
 const ApprovalRequestTable: React.FC<TableProps> = ({ approvalRequests, onApprove, onDecline, comments, setComments }) => {
@@ -29,20 +30,25 @@ const ApprovalRequestTable: React.FC<TableProps> = ({ approvalRequests, onApprov
     // Helper function to get the value by path
     const getFieldByPath = (obj: any, path: string): any => {
         const keys: string[] = path.split('.');
-        return keys.reduce((acc, key) => acc[key], obj);
+        return keys.reduce((acc, key) => acc && acc[key] !== undefined ? acc[key] : undefined, obj);
     };
+    
 
     // Function to sort approval requests
     const sortedApprovalRequest: ApprovalRequest[] = [...approvalRequests].sort((a, b) => {
         const aValue: any = getFieldByPath(a, sortBy);
         const bValue: any = getFieldByPath(b, sortBy);
-
+    
+        if (aValue === undefined) return 1;
+        if (bValue === undefined) return -1;
+    
         if (sortDirection === 'asc') {
             return aValue > bValue ? 1 : aValue < bValue ? -1 : 0;
         } else {
             return aValue < bValue ? 1 : aValue > bValue ? -1 : 0;
         }
     });
+    
 
     const handleSort = (field: SortField): void => {
         if (field === sortBy) {
@@ -96,9 +102,9 @@ const ApprovalRequestTable: React.FC<TableProps> = ({ approvalRequests, onApprov
                         </TableCell>
                         <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
                             <TableSortLabel
-                                active={sortBy === SortField.STATUS}
-                                direction={sortBy === SortField.STATUS ? sortDirection : 'asc'}
-                                onClick={() => handleSort(SortField.STATUS)}
+                                active={sortBy === SortField.LEAVE_REQUEST_ID}
+                                direction={sortBy === SortField.LEAVE_REQUEST_ID ? sortDirection : 'asc'}
+                                onClick={() => handleSort(SortField.LEAVE_REQUEST_ID)}
                             >
                                 Leave Request Id
                             </TableSortLabel>
@@ -111,8 +117,8 @@ const ApprovalRequestTable: React.FC<TableProps> = ({ approvalRequests, onApprov
                     {sortedApprovalRequest.map((approvalRequest: ApprovalRequest) => (
                         <TableRow key={approvalRequest.id}>
                             <TableCell>{approvalRequest.id}</TableCell>
-                            <TableCell>{approvalRequest.approver?.fullName}</TableCell>
-                            <TableCell><img src={approvalRequest.approver?.photo} alt="photo" /></TableCell>
+                            <TableCell>{approvalRequest.approver.fullName}</TableCell>
+                            <TableCell><img src={approvalRequest.approver.photo} alt="photo" /></TableCell>
                             <TableCell>{approvalRequest.approvalRequestStatus}</TableCell>
                             <TableCell>
                                 <Link to={`/leave-request-details/${approvalRequest.leaveRequest.id}`}>

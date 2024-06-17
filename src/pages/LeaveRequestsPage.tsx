@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import LeaveRequestTable from "../Components/Tables/LeaveRequestTable";
-import { useGetAllLeaveRequestsQuery } from "../services/LeaveRequestService";
+import { useDelLeaveRequestMutation, useGetAllLeaveRequestsQuery } from "../services/LeaveRequestService";
 import { LeaveRequest } from "../types/LeaveRequest";
 
 const LeaveRequestsPage = () => {
@@ -8,6 +8,8 @@ const LeaveRequestsPage = () => {
   const {data: leaveRequestList } = useGetAllLeaveRequestsQuery(null);
 
   const [leaveRequests, setleaveRequests] = useState<LeaveRequest[]>([])
+
+  const [deleteLeaveRequest] = useDelLeaveRequestMutation();
 
   useEffect(() => {
     if (leaveRequestList) {
@@ -20,9 +22,15 @@ const LeaveRequestsPage = () => {
     
   };
 
-  const handleDelete = (id: number) => {
-    // Реализация удаления
-    setleaveRequests(leaveRequests.filter((leaveRequest) => leaveRequest.id !== id));
+  const handleDelete = async (id: number) => {
+    try {
+      setleaveRequests(leaveRequests.filter((leaveRequest) => leaveRequest.id !== id));
+      await deleteLeaveRequest(id).unwrap();
+     
+    }catch (error: any) {
+      console.error('Failed to approve request:', error.data || error.message);
+    }
+    
   };
 
 

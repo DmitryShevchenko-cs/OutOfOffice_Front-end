@@ -1,6 +1,6 @@
 import { api } from "../api/api";
 import { HttpMethodType } from "../types/HttpInfo";
-import { LeaveRequest, UpdateApprovalRequest } from "../types/LeaveRequest";
+import { LeaveRequest, UpdateLeaveRequest } from "../types/LeaveRequest";
 
 export const Api = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -17,7 +17,7 @@ export const Api = api.injectEndpoints({
         },
       }),
     }),
-    updateLeaveRequest: builder.query<null, UpdateApprovalRequest>({
+    updateLeaveRequest: builder.query<null, UpdateLeaveRequest>({
       query: (data) => ({
         body: data,
         url: "/api/leaverequest",
@@ -44,7 +44,21 @@ export const Api = api.injectEndpoints({
         },
       }),
     }),
+
+    delLeaveRequest: builder.mutation({
+      query: (requestId) => ({
+        url: `/api/leaverequest/${requestId}`,
+        method: HttpMethodType.DELETE,
+        responseHandler: async (response) => {
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP error! Status: ${response.status}, ${errorText}`);
+          }
+          return response.json();
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetAllLeaveRequestsQuery, useUpdateLeaveRequestQuery, useGetLeaveRequestQuery} = Api;
+export const { useGetAllLeaveRequestsQuery, useUpdateLeaveRequestQuery, useGetLeaveRequestQuery, useDelLeaveRequestMutation} = Api;
