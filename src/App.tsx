@@ -9,7 +9,7 @@ import EmployeesPage from './pages/EmployeesPage';
 import LeaveRequestsPage from './pages/LeaveRequestsPage';
 import ManagersPage from './pages/ManagersPage';
 import ProjectsPage from './pages/ProjectsPage';
-import CreateUserPage from './pages/CreateUserPage';
+import CreateUserPage from './pages/CreateEmployeePage';
 import LeaveRequestDetailsPage from './pages/LeaveRequestDetailsPage';
 import { UserType } from './types/User';
 import UpdateLeaveRequestPage from './pages/UpdateLeaveRequestPage';
@@ -54,7 +54,7 @@ function App() {
           <Route index element={<EditProjectEmployees />} />
         </Route>
         
-        <Route path="/create-user" element={<ProtectedRoute allowedRoles={[UserType.Admin]} />}>
+        <Route path="/create-user" element={<ProtectedRoute allowedRoles={[UserType.Admin, UserType.HrManager]} />}>
           <Route index element={<CreateUserPage />} />
         </Route>
 

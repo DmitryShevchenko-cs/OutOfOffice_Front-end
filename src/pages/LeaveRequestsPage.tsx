@@ -41,7 +41,7 @@ const LeaveRequestsPage = () => {
         to="/create-leave-request"
         variant="contained"
         color="primary"
-        sx={{ mt: 2, mb: 2 }} // Пример использования sx для простой настройки отступов
+        sx={{ mt: 2, mb: 2 }}
       >
         Create Leave Request
       </Button>

@@ -37,7 +37,7 @@ const ProjectsPage = () => {
         to="/create-project"
         variant="contained"
         color="primary"
-        sx={{ mt: 2, mb: 2 }} // Пример использования sx для простой настройки отступов
+        sx={{ mt: 2, mb: 2 }}
       >
         Create Project
       </Button>

@@ -1,6 +1,7 @@
 import { api } from "../api/api";
-import { Employee } from "../types/Emloyees";
+import { Employee, ICreateEmployee } from "../types/Emloyees";
 import { HttpMethodType } from "../types/HttpInfo";
+import { ICreateUserModel } from "../types/User";
 
 export const Api = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -31,7 +32,21 @@ export const Api = api.injectEndpoints({
         },
       }),
     }),
+    CreateEmployee: builder.mutation({
+      query: (employee:ICreateEmployee) => ({
+        url: `/api/employee`,
+        body: employee,
+        method: HttpMethodType.POST,
+        responseHandler: async (response) => {
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP error! Status: ${response.status}, ${errorText}`);
+          }
+          return response.json();
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetAllEmployeesQuery, useDeactivateEmployeeMutation } = Api;
+export const { useGetAllEmployeesQuery, useDeactivateEmployeeMutation, useCreateEmployeeMutation } = Api;

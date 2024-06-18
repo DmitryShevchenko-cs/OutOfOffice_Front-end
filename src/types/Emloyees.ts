@@ -28,3 +28,12 @@ export interface ProjectManager extends BaseManager{
     Projects: Project[]
 }
 
+export interface ICreateEmployee{
+    login:string
+    password:string
+    fullName: string
+    subdivisionId: number
+    positionId: number
+    status: boolean
+    outOfOfficeBalance: number
+}
