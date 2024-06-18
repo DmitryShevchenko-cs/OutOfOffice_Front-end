@@ -1,3 +1,4 @@
+import { Project } from "./Project";
 import { UserType } from "./User";
 import { Position, Subdivision } from "./selections";
 
@@ -20,10 +21,10 @@ export interface BaseManager extends BaseEmployee{
 }
 
 export interface HrManager extends BaseManager{
-
+    Partners: Employee[]
 }
 
 export interface ProjectManager extends BaseManager{
-    
+    Projects: Project[]
 }
 

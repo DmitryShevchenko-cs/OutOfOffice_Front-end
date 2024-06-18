@@ -24,7 +24,7 @@ enum SortField {
 const EmployeeTable: React.FC<TableProps> = ({ projects, onDelete }) => {
     const [sortBy, setSortBy] = useState<SortField>(SortField.ID);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-    const role = useSelector((state: RootState) => state.auth.role); 
+    const role = useSelector((state: RootState) => state.auth.role);
 
     const getFieldByPath = (obj: any, path: string): any => {
         const keys = path.split('.');
@@ -59,7 +59,7 @@ const EmployeeTable: React.FC<TableProps> = ({ projects, onDelete }) => {
 
     return (
         <TableContainer>
-            <Table sx={{backgroundColor:"white", borderRadius:"10px"}}>
+            <Table sx={{ backgroundColor: "white", borderRadius: "10px" }}>
                 <TableHead>
                     <TableRow>
                         <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
@@ -136,8 +136,14 @@ const EmployeeTable: React.FC<TableProps> = ({ projects, onDelete }) => {
                             <TableCell>{project.status ? 'Active' : 'Inactive'}</TableCell>
                             {canEditOrDelete(role) && (
                                 <TableCell>
-                                    <Button sx={{border: "1px solid blue", marginRight: "5px" }}>Edit</Button>
-                                    <Button sx={{ border: "1px solid red", color:"red"}} onClick={() => onDelete(project.id)}>Deactivate</Button>
+                                    <Button
+                                        sx={{ border: "1px solid blue", marginRight: "5px" }}
+                                        component={Link}
+                                        to={`/update-project/${project.id}`}
+                                    >
+                                        Edit
+                                    </Button>
+                                    <Button sx={{ border: "1px solid red", color: "red" }} onClick={() => onDelete(project.id)}>Deactivate</Button>
                                 </TableCell>
                             )}
                         </TableRow>

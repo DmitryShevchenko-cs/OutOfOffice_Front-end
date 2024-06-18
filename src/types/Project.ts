@@ -21,3 +21,13 @@ export interface ProjectDetail {
     status: boolean
     employees: Employee[]
 }
+
+export interface UpdateProject {
+    id: number
+    projectManagerId: number
+    projectTypeId: number
+    startDate: string
+    endDate: string
+    comment: string
+    status: boolean
+}

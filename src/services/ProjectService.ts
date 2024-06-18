@@ -1,6 +1,6 @@
 import { api } from "../api/api";
 import { HttpMethodType } from "../types/HttpInfo";
-import { Project, ProjectDetail } from "../types/Project";
+import { Project, ProjectDetail, UpdateProject } from "../types/Project";
 
 export const Api = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -31,8 +31,22 @@ export const Api = api.injectEndpoints({
       }),
     }),
     deactivateProject: builder.mutation({
-      query: (requestId:number) => ({
-        url: `/api/project/deactivate/${requestId}`,
+      query: (projectId:number) => ({
+        url: `/api/project/deactivate/${projectId}`,
+        method: HttpMethodType.PUT,
+        responseHandler: async (response) => {
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP error! Status: ${response.status}, ${errorText}`);
+          }
+          return response.json();
+        },
+      }),
+    }),
+    updateProject: builder.mutation({
+      query: (project:UpdateProject) => ({
+        url: `/api/project`,
+        body: project,
         method: HttpMethodType.PUT,
         responseHandler: async (response) => {
           if (!response.ok) {
@@ -46,4 +60,4 @@ export const Api = api.injectEndpoints({
   }),
 });
 
-export const { useGetAllProjetsQuery, useGetProjetQuery, useDeactivateProjectMutation} = Api;
+export const { useGetAllProjetsQuery, useGetProjetQuery, useDeactivateProjectMutation, useUpdateProjectMutation} = Api;

@@ -1,5 +1,5 @@
 import { api } from "../api/api";
-import { BaseManager } from "../types/Emloyees";
+import { BaseManager, HrManager, ProjectManager } from "../types/Emloyees";
 import { HttpMethodType } from "../types/HttpInfo";
 
 export const Api = api.injectEndpoints({
@@ -7,6 +7,32 @@ export const Api = api.injectEndpoints({
     getAllManagers: builder.query<BaseManager[], null>({
       query: () => ({
         url: "/api/manager",
+        method: HttpMethodType.GET,
+        responseHandler: async (response) => {
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP error! Status: ${response.status}, ${errorText}`);
+          }
+          return response.json();
+        },
+      }),
+    }),
+    getProjectManagers: builder.query<ProjectManager[], null>({
+      query: () => ({
+        url: "/api/manager/project-managers",
+        method: HttpMethodType.GET,
+        responseHandler: async (response) => {
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP error! Status: ${response.status}, ${errorText}`);
+          }
+          return response.json();
+        },
+      }),
+    }),
+    getHrManagers: builder.query<HrManager[], null>({
+      query: () => ({
+        url: "/api/manager/hr-managers",
         method: HttpMethodType.GET,
         responseHandler: async (response) => {
           if (!response.ok) {
@@ -46,4 +72,4 @@ export const Api = api.injectEndpoints({
   }),
 });
 
-export const { useGetAllManagersQuery, useGetApproversQuery, useDelManagerMutation} = Api;
+export const { useGetAllManagersQuery, useGetApproversQuery, useDelManagerMutation, useGetProjectManagersQuery, useGetHrManagersQuery} = Api;
