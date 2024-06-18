@@ -32,7 +32,33 @@ export const Api = api.injectEndpoints({
         },
       }),
     }),
+    getSubdivisions: builder.query<ProjectType[], null>({
+      query: () => ({
+        url: "/api/selection/subdivision",
+        method: HttpMethodType.GET,
+        responseHandler: async (response) => {
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP error! Status: ${response.status}, ${errorText}`);
+          }
+          return response.json();
+        },
+      }),
+    }),
+    getPositions: builder.query<ProjectType[], null>({
+      query: () => ({
+        url: "/api/selection/position",
+        method: HttpMethodType.GET,
+        responseHandler: async (response) => {
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP error! Status: ${response.status}, ${errorText}`);
+          }
+          return response.json();
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetAbsenceReasonQuery, useGetProjectTypeQuery } = Api;
+export const { useGetAbsenceReasonQuery, useGetProjectTypeQuery, useGetPositionsQuery, useGetSubdivisionsQuery } = Api;

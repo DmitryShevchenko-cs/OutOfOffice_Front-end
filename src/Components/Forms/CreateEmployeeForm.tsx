@@ -3,10 +3,13 @@ import { useCreateEmployeeMutation } from "../../services/EmployeeService";
 import { Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
 import styles from "../../scss/updateForm.module.scss";
 import { ICreateEmployee } from "../../types/Emloyees";
+import { useGetPositionsQuery, useGetSubdivisionsQuery } from "../../services/SelectionService";
 
 const CreateUserForm: React.FC = () => {
-  const { handleSubmit, register } = useForm<ICreateEmployee>();
+  const { handleSubmit, register, setValue } = useForm<ICreateEmployee>();
   const [createUser] = useCreateEmployeeMutation(); 
+  const { data: subdivisions, isLoading: isLoadingsubdivisions } = useGetSubdivisionsQuery(null);
+  const { data: positions, isLoading: isLoadingpositions } = useGetPositionsQuery(null);
 
   const onSubmit: SubmitHandler<ICreateEmployee> = async (data: ICreateEmployee) => {
     try {
@@ -16,6 +19,10 @@ const CreateUserForm: React.FC = () => {
       console.error('Failed to create user:', error);
     }
   };
+
+  if (isLoadingsubdivisions || isLoadingpositions) {
+    return <div>Loading...</div>;
+}
 
   return (
     <div className={styles.container}>
@@ -54,24 +61,48 @@ const CreateUserForm: React.FC = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                {...register('subdivisionId')}
-                className={styles.field}
-                label="Subdivision ID"
-                type="number"
-                fullWidth
-                required
-              />
+              <FormControl fullWidth>
+                <InputLabel>Subdivision</InputLabel>
+                <Select
+                  {...register('subdivisionId')}
+                  className={styles.field}
+                  label="Subdivision ID"
+                  type="number"
+                  fullWidth
+                  required
+                  onChange={(e) => {
+                    setValue('subdivisionId', e.target.value as number);
+                  }}
+                >
+                  {subdivisions && subdivisions.map((subdivision) => (
+                    <MenuItem key={subdivision.id} value={subdivision.id}>
+                      {subdivision.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                {...register('positionId')}
-                className={styles.field}
-                label="Position ID"
-                type="number"
-                fullWidth
-                required
-              />
+              <FormControl fullWidth>
+                <InputLabel>Position</InputLabel>
+                <Select
+                  {...register('positionId')}
+                  className={styles.field}
+                  label="Position ID"
+                  type="number"
+                  fullWidth
+                  required
+                  onChange={(e) => {
+                    setValue('positionId', e.target.value as number);
+                  }}
+                >
+                  {positions && positions.map((position) => (
+                    <MenuItem key={position.id} value={position.id}>
+                      {position.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Grid>
             <Grid item xs={12}>
               <FormControl fullWidth>
