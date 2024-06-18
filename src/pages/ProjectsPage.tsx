@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import ProjectTable from "../Components/Tables/ProjectTable";
 import { Project } from "../types/Project";
 import { useDeactivateProjectMutation, useGetAllProjetsQuery } from "../services/ProjectService";
+import { Link } from "react-router-dom";
+import { Button } from "@mui/material";
 
 const ProjectsPage = () => {
 
@@ -30,6 +32,15 @@ const ProjectsPage = () => {
       <div>
         <h1>Projects Page</h1>
       </div>     
+      <Button
+        component={Link}
+        to="/create-project"
+        variant="contained"
+        color="primary"
+        sx={{ mt: 2, mb: 2 }} // Пример использования sx для простой настройки отступов
+      >
+        Create Project
+      </Button>
       <ProjectTable projects={projects} onDelete={handleDelete}/>
     </>
   );

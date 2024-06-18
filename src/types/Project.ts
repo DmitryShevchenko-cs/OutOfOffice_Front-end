@@ -31,3 +31,16 @@ export interface UpdateProject {
     comment: string
     status: boolean
 }
+
+export interface CreateProject {
+    projectTypeId: number
+    startDate: string
+    endDate: string
+    comment: string
+    status: boolean
+}
+
+export interface AddEmployees{
+    projectId: number
+    employeesIds: number[]
+}

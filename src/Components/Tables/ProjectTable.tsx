@@ -143,7 +143,12 @@ const EmployeeTable: React.FC<TableProps> = ({ projects, onDelete }) => {
                                     >
                                         Edit
                                     </Button>
-                                    <Button sx={{ border: "1px solid red", color: "red" }} onClick={() => onDelete(project.id)}>Deactivate</Button>
+                                    <Button sx={{ border: "1px solid red", color: "red", marginRight: "5px" }} onClick={() => onDelete(project.id)}>Deactivate</Button>
+                                    <Button sx={{ border: "1px solid green", color: "green" }}
+                                        component={Link}
+                                        to={`/project-add-employees/${project.id}`}
+                                    >
+                                        Edit employees</Button>
                                 </TableCell>
                             )}
                         </TableRow>

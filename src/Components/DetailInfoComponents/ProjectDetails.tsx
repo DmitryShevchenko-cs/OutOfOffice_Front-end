@@ -1,5 +1,5 @@
 import { Grid, Paper, Typography } from "@mui/material";
-import { useGetProjetQuery } from "../../services/ProjectService";
+import { useGetProjectQuery } from "../../services/ProjectService";
 
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
 
 const ProjectDetails: React.FC<Props> = ({ id }) => {
 
-  const { data: projects, isLoading } = useGetProjetQuery(Number(id));
+  const { data: projects, isLoading } = useGetProjectQuery(Number(id));
 
   console.log(projects?.employees)
   console.log(projects)

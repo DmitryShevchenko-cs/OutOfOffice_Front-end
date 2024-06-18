@@ -1,14 +1,14 @@
 import { useParams } from "react-router-dom";
-import UpdateProjectForm from "../Components/Forms/UpdateProjectForm";
+import AddEmployeesForm from "../Components/Forms/AddEmployeeForm";
 
-const UpdateProjectPage: React.FC = () => {
+const EditProjectEmployees: React.FC = () => {
     const { id } = useParams<string>(); // Получаем id из параметров маршрута
 
     return (
         <>
-            <UpdateProjectForm id={id!}  />
+            <AddEmployeesForm id={id!}  />
         </>
     );
 };
 
-export default UpdateProjectPage;
+export default EditProjectEmployees;

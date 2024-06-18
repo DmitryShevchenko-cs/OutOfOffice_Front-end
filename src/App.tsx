@@ -16,6 +16,8 @@ import UpdateLeaveRequestPage from './pages/UpdateLeaveRequestPage';
 import CreateLeaveRequestPage from './pages/CreateLeaveRequestPage';
 import ProjectDetailsPage from './pages/ProjectDetailsPage';
 import UpdateProjectPage from './pages/UpdateProjectPage';
+import CreateProjectPage from './pages/CreateProjectPage';
+import EditProjectEmployees from './pages/EditProjectEmployees';
 
 function App() {
   
@@ -44,6 +46,12 @@ function App() {
         </Route>
         <Route path="/update-project/:id" element={<ProtectedRoute allowedRoles={[UserType.Admin, UserType.ProjectManager]}/>}>
           <Route index element={<UpdateProjectPage />} />
+        </Route>
+        <Route path="/create-project" element={<ProtectedRoute allowedRoles={[UserType.Admin, UserType.ProjectManager]}/>}>
+          <Route index element={<CreateProjectPage />} />
+        </Route>
+        <Route path="/project-add-employees/:id" element={<ProtectedRoute allowedRoles={[UserType.Admin, UserType.ProjectManager]}/>}>
+          <Route index element={<EditProjectEmployees />} />
         </Route>
         
         <Route path="/create-user" element={<ProtectedRoute allowedRoles={[UserType.Admin]} />}>

@@ -5,7 +5,7 @@ import styles from "../../scss/updateForm.module.scss";
 import { formatDate } from "../../Helpers/FormatDateHelper";
 import { useGetProjectManagersQuery } from "../../services/ManagerService";
 import { useGetProjectTypeQuery } from "../../services/SelectionService";
-import { useGetProjetQuery, useUpdateProjectMutation } from "../../services/ProjectService";
+import { useGetProjectQuery, useUpdateProjectMutation } from "../../services/ProjectService";
 import { UpdateProject } from "../../types/Project";
 
 interface Props {
@@ -14,7 +14,7 @@ interface Props {
 
 const UpdateLeaveRequestForm: React.FC<Props> = ({ id }) => {
 
-    const { data: project, isLoading: isLoadingProjects } = useGetProjetQuery(Number(id));
+    const { data: project, isLoading: isLoadingProjects } = useGetProjectQuery(Number(id));
     const { data: projectManagers, isLoading: isLoadingManagers } = useGetProjectManagersQuery(null);
     const { data: types, isLoading: isLoadingTypes } = useGetProjectTypeQuery(null);
 
@@ -40,7 +40,7 @@ const UpdateLeaveRequestForm: React.FC<Props> = ({ id }) => {
             await updateProject(data).unwrap();
             console.log(data);
         } catch (error) {
-            console.error('Failed to update project detail:', error);
+            console.error('Failed to update project:', error);
         }
     };
 
@@ -52,7 +52,7 @@ const UpdateLeaveRequestForm: React.FC<Props> = ({ id }) => {
         <div className={styles.container}>
             <Paper elevation={4} classes={{ root: styles.root }}>
                 <Typography sx={{ marginBottom: "20px" }} classes={{ root: styles.title }} variant='h5'>
-                    Update Project Detail
+                    Update Project
                 </Typography>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
