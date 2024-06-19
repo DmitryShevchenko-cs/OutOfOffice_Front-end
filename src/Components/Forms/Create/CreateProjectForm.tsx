@@ -10,7 +10,7 @@ const CreateLeaveRequestForm: React.FC = () => {
     const { data: types, isLoading: isLoadingTypes } = useGetProjectTypeQuery(null);
     const [createProject] = useCreateProjectMutation();
 
-    const { handleSubmit, register, setValue } = useForm<CreateProject>();
+    const { handleSubmit, register, setValue, formState: { errors } } = useForm<CreateProject>();
 
 
     const onSubmit: SubmitHandler<CreateProject> = async (data: CreateProject) => {
@@ -28,18 +28,18 @@ const CreateLeaveRequestForm: React.FC = () => {
     return (
         <div className={styles.container}>
             <Paper elevation={4} classes={{ root: styles.root }}>
-                <Typography sx={{ marginBottom: "20px" }} classes={{ root: styles.title }} variant='h5'>
+                <Typography sx={{ marginBottom: '20px' }} classes={{ root: styles.title }} variant='h5'>
                     Create Project
                 </Typography>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <FormControl fullWidth>
-                                <InputLabel>Project types</InputLabel>
+                            <FormControl fullWidth error={!!errors.projectTypeId}>
+                                <InputLabel>Project Type</InputLabel>
                                 <Select
-                                    {...register('projectTypeId')}
-                                    label="Absence Reason Id"
+                                    {...register('projectTypeId', { required: 'Project Type is required' })}
+                                    label="Project Type"
                                     className={styles.field}
                                     fullWidth
                                     onChange={(e) => {
@@ -52,26 +52,31 @@ const CreateLeaveRequestForm: React.FC = () => {
                                         </MenuItem>
                                     ))}
                                 </Select>
+                                <Typography variant="caption" color="error">{errors.projectTypeId && errors.projectTypeId.message}</Typography>
                             </FormControl>
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                {...register('startDate')}
+                                {...register('startDate', { required: 'Start Date is required' })}
                                 className={styles.field}
                                 label="Start Date"
                                 type="date"
                                 fullWidth
                                 InputLabelProps={{ shrink: true }}
+                                error={!!errors.startDate}
+                                helperText={errors.startDate && errors.startDate.message}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                {...register('endDate')}
+                                {...register('endDate', { required: 'End Date is required' })}
                                 className={styles.field}
                                 label="End Date"
                                 type="date"
                                 fullWidth
                                 InputLabelProps={{ shrink: true }}
+                                error={!!errors.endDate}
+                                helperText={errors.endDate && errors.endDate.message}
                             />
                         </Grid>
                         <Grid item xs={12}>

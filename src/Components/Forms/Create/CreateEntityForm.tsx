@@ -14,7 +14,7 @@ interface CreateEntityFormProps {
 }
 
 const CreateEntityForm: React.FC<CreateEntityFormProps> = ({ entityType }) => {
-    const { handleSubmit, register } = useForm<FormModel>();
+    const { handleSubmit, register, formState: { errors } } = useForm<FormModel>();
     const [createEntity] = useCreateEntityMutation(entityType);
 
     const onSubmit: SubmitHandler<FormModel> = async (data: FormModel) => {
@@ -47,10 +47,12 @@ const CreateEntityForm: React.FC<CreateEntityFormProps> = ({ entityType }) => {
                         {entityType !== 'AbsenceReason' && (
                             <Grid item xs={12}>
                                 <TextField
-                                    {...register('name')}
+                                    {...register('name', { required: 'name is required' })}
                                     className={styles.field}
                                     label="Name"
                                     fullWidth
+                                    error={Boolean(errors.name)}
+                                    helperText={errors.name?.message}
                                     required
                                 />
                             </Grid>
@@ -62,6 +64,8 @@ const CreateEntityForm: React.FC<CreateEntityFormProps> = ({ entityType }) => {
                                     className={styles.field}
                                     label="Reason Description"
                                     fullWidth
+                                    error={Boolean(errors.name)}
+                                    helperText={errors.name?.message}
                                     required
                                 />
                             </Grid>

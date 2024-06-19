@@ -12,7 +12,7 @@ const CreateLeaveRequestForm: React.FC = () => {
     const { data: reasons, isLoading: isLoadingReasons } = useGetAbsenceReasonQuery(null);
     const [createLeaveRequest] = useCreateLeaveRequestMutation();
 
-    const { handleSubmit, register, setValue } = useForm<CreateLeaveRequest>();
+    const { handleSubmit, register, setValue, formState: { errors }  } = useForm<CreateLeaveRequest>();
 
 
     const onSubmit: SubmitHandler<CreateLeaveRequest> = async (data: CreateLeaveRequest) => {
@@ -37,10 +37,10 @@ const CreateLeaveRequestForm: React.FC = () => {
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={Boolean(errors.absenceReasonId)}>
                                 <InputLabel>Absence reason</InputLabel>
                                 <Select
-                                    {...register('absenceReasonId')}
+                                    {...register('absenceReasonId', { required: 'Absence Reason is required' })}
                                     label="Absence Reason Id"
                                     className={styles.field}
                                     fullWidth
@@ -54,13 +54,14 @@ const CreateLeaveRequestForm: React.FC = () => {
                                         </MenuItem>
                                     ))}
                                 </Select>
+                                {errors.absenceReasonId && <Typography variant="caption" color="error">{errors.absenceReasonId.message}</Typography>}
                             </FormControl>
                         </Grid>
                         <Grid item xs={12}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={Boolean(errors.approverId)}>
                                 <InputLabel>Approver</InputLabel>
                                 <Select
-                                    {...register('approverId')}
+                                    {...register('approverId', { required: 'Approver is required' })}
                                     label="Approver"
                                     className={styles.field}
                                     fullWidth
@@ -74,26 +75,31 @@ const CreateLeaveRequestForm: React.FC = () => {
                                         </MenuItem>
                                     ))}
                                 </Select>
+                                {errors.approverId && <Typography variant="caption" color="error">{errors.approverId.message}</Typography>}
                             </FormControl>
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                {...register('startDate')}
+                                {...register('startDate', { required: 'Start Date is required' })}
                                 className={styles.field}
                                 label="Start Date"
                                 type="date"
                                 fullWidth
                                 InputLabelProps={{ shrink: true }}
+                                error={Boolean(errors.startDate)}
+                                helperText={errors.startDate && errors.startDate.message}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                {...register('endDate')}
+                                {...register('endDate', { required: 'End Date is required' })}
                                 className={styles.field}
                                 label="End Date"
                                 type="date"
                                 fullWidth
                                 InputLabelProps={{ shrink: true }}
+                                error={Boolean(errors.endDate)}
+                                helperText={errors.endDate && errors.endDate.message}
                             />
                         </Grid>
                         <Grid item xs={12}>
