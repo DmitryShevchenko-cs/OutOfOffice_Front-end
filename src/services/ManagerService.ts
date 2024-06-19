@@ -1,5 +1,5 @@
 import { api } from "../api/api";
-import { BaseManager, DetailManager, HrManager, ProjectManager } from "../types/Emloyees";
+import { BaseManager, CreateManager, DetailManager, HrManager, ProjectManager } from "../types/Emloyees";
 import { HttpMethodType } from "../types/HttpInfo";
 
 export const Api = api.injectEndpoints({
@@ -82,8 +82,38 @@ export const Api = api.injectEndpoints({
         },
       }),
     }),
+    createProjectManager: builder.mutation({
+      query: (manager:CreateManager) => ({
+        url: `/api/manager/project-manager`,
+        method: HttpMethodType.POST,
+        body:manager,
+        responseHandler: async (response) => {
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP error! Status: ${response.status}, ${errorText}`);
+          }
+          return response.json();
+        },
+      }),
+    }),
+    createHrManager: builder.mutation({
+      query: (manager:CreateManager) => ({
+        url: `/api/manager/hr-manager`,
+        method: HttpMethodType.POST,
+        body: manager,
+        responseHandler: async (response) => {
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP error! Status: ${response.status}, ${errorText}`);
+          }
+          return response.json();
+        },
+      }),
+    }),
   }),
 });
 
 export const { useGetAllManagersQuery, useGetApproversQuery, useGetDetailsManagerQuery,
-  useDelManagerMutation, useGetProjectManagersQuery, useGetHrManagersQuery} = Api;
+  useDelManagerMutation, useGetProjectManagersQuery, useGetHrManagersQuery,
+  useCreateHrManagerMutation, useCreateProjectManagerMutation
+} = Api;

@@ -28,7 +28,7 @@ const CreateUserForm: React.FC = () => {
     <div className={styles.container}>
       <Paper elevation={4} classes={{ root: styles.root }}>
         <Typography sx={{ marginBottom: "20px" }} classes={{ root: styles.title }} variant='h5'>
-          Create User
+          Create employee
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
@@ -130,7 +130,7 @@ const CreateUserForm: React.FC = () => {
             </Grid>
             <Grid item xs={12}>
               <Button type="submit" size="large" variant="contained" fullWidth>
-                Create User
+              Create employee
               </Button>
             </Grid>
           </Grid>
