@@ -1,5 +1,5 @@
 import { api } from "../api/api";
-import { Employee, ICreateEmployee } from "../types/Emloyees";
+import { Employee, CreateEmployee, UpdateEmployee } from "../types/Emloyees";
 import { HttpMethodType } from "../types/HttpInfo";
 import { ICreateUserModel } from "../types/User";
 
@@ -18,6 +18,19 @@ export const Api = api.injectEndpoints({
           },
         }),
     }),
+    getEmployee: builder.query<Employee,number>({
+      query: (employeeId) => ({
+        url: `/api/employee/${employeeId}`,
+        method: HttpMethodType.GET,
+        responseHandler: async (response) => {
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP error! Status: ${response.status}, ${errorText}`);
+            }
+            return response.json();
+        },
+      }),
+  }),
 
     deactivateEmployee: builder.mutation({
       query: (requestId:number) => ({
@@ -33,7 +46,7 @@ export const Api = api.injectEndpoints({
       }),
     }),
     CreateEmployee: builder.mutation({
-      query: (employee:ICreateEmployee) => ({
+      query: (employee:CreateEmployee) => ({
         url: `/api/employee`,
         body: employee,
         method: HttpMethodType.POST,
@@ -46,7 +59,22 @@ export const Api = api.injectEndpoints({
         },
       }),
     }),
+    UpdateEmployee: builder.mutation({
+      query: (employee:UpdateEmployee) => ({
+        url: `/api/employee`,
+        body: employee,
+        method: HttpMethodType.PUT,
+        responseHandler: async (response) => {
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP error! Status: ${response.status}, ${errorText}`);
+          }
+          return response.json();
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetAllEmployeesQuery, useDeactivateEmployeeMutation, useCreateEmployeeMutation } = Api;
+export const { useGetAllEmployeesQuery, useDeactivateEmployeeMutation, 
+  useCreateEmployeeMutation, useGetEmployeeQuery, useUpdateEmployeeMutation} = Api;

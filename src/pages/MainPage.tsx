@@ -18,14 +18,6 @@ const MainPage = () => {
         <p>No photo available</p>
       )}
       <p>User Type: {role}</p>
-      <Button
-        component={Link}
-        to="/create-user"
-        variant="contained"
-        color="primary"
-      >
-        Create user
-      </Button>
     </div>
   );
 };

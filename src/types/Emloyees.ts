@@ -13,7 +13,8 @@ export interface Employee extends BaseEmployee {
     position: Position
     status: boolean
     outOfOfficeBalance: number
-    hrManager: BaseManager | null
+    hrManager: HrManager | null
+    projects: Project[]
 }
 
 export interface BaseManager extends BaseEmployee{
@@ -21,14 +22,14 @@ export interface BaseManager extends BaseEmployee{
 }
 
 export interface HrManager extends BaseManager{
-    Partners: Employee[]
+    partners: Employee[]
 }
 
 export interface ProjectManager extends BaseManager{
-    Projects: Project[]
+    projects: Project[]
 }
 
-export interface ICreateEmployee{
+export interface CreateEmployee{
     login:string
     password:string
     fullName: string
@@ -36,4 +37,21 @@ export interface ICreateEmployee{
     positionId: number
     status: boolean
     outOfOfficeBalance: number
+}
+export interface UpdateEmployee{
+    id: number
+    login:string
+    password:string
+    fullName: string
+    subdivisionId: number
+    positionId: number
+    status: boolean
+    outOfOfficeBalance: number
+    hrManagerId:number
+}
+
+export interface CreateManager{
+    login:string
+    password:string
+    fullName: string
 }

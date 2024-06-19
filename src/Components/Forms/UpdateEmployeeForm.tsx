@@ -2,48 +2,51 @@ import { useEffect} from "react";
 import { LeaveRequestStatus, UpdateLeaveRequest } from "../../types/LeaveRequest";
 import { Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useGetLeaveRequestQuery, useUpdateLeaveRequestMutation } from "../../services/LeaveRequestService";
 import styles from "../../scss/updateForm.module.scss";
-import { formatDate } from "../../Helpers/FormatDateHelper";
-import { useGetApproversQuery } from "../../services/ManagerService";
-import { useGetAbsenceReasonQuery } from "../../services/SelectionService";
+import { useGetPositionsQuery, useGetSubdivisionsQuery } from "../../services/SelectionService";
+import { useGetEmployeeQuery, useUpdateEmployeeMutation } from "../../services/EmployeeService";
+import { UpdateEmployee } from "../../types/Emloyees";
+import { useGetHrManagersQuery } from "../../services/ManagerService";
 
 interface Props {
     id: string;
 }
 
-const UpdateLeaveRequestForm: React.FC<Props> = ({ id }) => {
+const UpdateEmployeeForm: React.FC<Props> = ({ id }) => {
 
-    const { data: leaveRequest, isLoading: isLoadingRequests } = useGetLeaveRequestQuery(Number(id));
-    const { data: approvers, isLoading: isLoadingApprovers } = useGetApproversQuery(null);
-    const { data: reasons, isLoading: isLoadingReasons } = useGetAbsenceReasonQuery(null);
-    const [updateLeaveRequest] = useUpdateLeaveRequestMutation();
-    const { handleSubmit, register, reset, setValue } = useForm<UpdateLeaveRequest>();
+    const { data: employee, isLoading: isLoadingEmployee } = useGetEmployeeQuery(Number(id));
+    const { data: subdivisions, isLoading: isLoadingSubdivisions } = useGetSubdivisionsQuery(null);
+    const { data: positions, isLoading: isLoadingPositions } = useGetPositionsQuery(null);
+    const { data: hrManagers, isLoading: isLoadinghrManagers } = useGetHrManagersQuery(null);
+    const [updateEmployee] = useUpdateEmployeeMutation();
+    const { handleSubmit, register, reset, setValue } = useForm<UpdateEmployee>();
+
+    console.log(employee)
 
     useEffect(() => {
-        if (leaveRequest) {
+        if (employee) {
             reset({
-                id: leaveRequest.id,
-                absenceReasonId: leaveRequest.absenceReason?.id ?? 0,
-                approverId: leaveRequest.approvalRequest?.approver?.id ?? 0,
-                startDate: formatDate(leaveRequest.startDate),
-                endDate: formatDate(leaveRequest.endDate),
-                status: leaveRequest.status,
-                comment: leaveRequest.comment || '',
+                id: employee.id,
+                fullName: employee.fullName,
+                subdivisionId: employee.subdivision.id,
+                positionId: employee.position.id,
+                status: employee.status,
+                outOfOfficeBalance: employee.outOfOfficeBalance,
             });
         }
-    }, [leaveRequest, reset]);
+    }, [employee, reset]);
 
-    const onSubmit: SubmitHandler<UpdateLeaveRequest> = async (data: UpdateLeaveRequest) => {
+    const onSubmit: SubmitHandler<UpdateEmployee> = async (data: UpdateEmployee) => {
         try {
-            await updateLeaveRequest(data).unwrap();
             console.log(data);
+            await updateEmployee(data).unwrap();
+            
         } catch (error) {
             console.error('Failed to update leave request:', error);
         }
     };
 
-    if (isLoadingRequests || isLoadingApprovers || isLoadingReasons) {
+    if (isLoadingEmployee || isLoadingSubdivisions || isLoadingPositions || isLoadinghrManagers) {
         return <div>Loading...</div>;
     }
 
@@ -51,27 +54,52 @@ const UpdateLeaveRequestForm: React.FC<Props> = ({ id }) => {
         <div className={styles.container}>
             <Paper elevation={4} classes={{ root: styles.root }}>
                 <Typography sx={{ marginBottom: "20px" }} classes={{ root: styles.title }} variant='h5'>
-                    Update Leave Request
+                    Update Employee
                 </Typography>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                            <TextField
+                                {...register('login')}
+                                className={styles.field}
+                                label="Login"
+                                fullWidth
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                {...register('password')}
+                                className={styles.field}
+                                label="Password"
+                                fullWidth
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                {...register('fullName')}
+                                className={styles.field}
+                                label="Full Name"
+                                fullWidth
+                            />
+                        </Grid>
                         <Grid item xs={12}>
                             <FormControl fullWidth>
-                                <InputLabel>Absence reason</InputLabel>
+                                <InputLabel>Hr manager</InputLabel>
                                 <Select
-                                    {...register('absenceReasonId')}
-                                    label="Absence Reason Id"
+                                    {...register('hrManagerId')}
+                                    label="HrManager"
                                     className={styles.field}
                                     fullWidth
-                                    defaultValue={leaveRequest?.absenceReason?.id || ""}
+                                    defaultValue={employee?.hrManager?.id || ""}
                                     onChange={(e) => {
-                                        setValue('absenceReasonId', e.target.value as number);
+                                        setValue('hrManagerId', e.target.value as number);
                                     }}
+                                    required
                                 >
-                                    {reasons && reasons.map((reason) => (
-                                        <MenuItem key={reason.id} value={reason.id}>
-                                            {reason.reasonDescription}
+                                    {hrManagers && hrManagers.map((hrManager) => (
+                                        <MenuItem key={hrManager.id} value={hrManager.id}>
+                                            {hrManager.fullName}
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -79,44 +107,45 @@ const UpdateLeaveRequestForm: React.FC<Props> = ({ id }) => {
                         </Grid>
                         <Grid item xs={12}>
                             <FormControl fullWidth>
-                                <InputLabel>Approver</InputLabel>
+                                <InputLabel>Subdivision</InputLabel>
                                 <Select
-                                    {...register('approverId')}
-                                    label="Approver"
+                                    {...register('subdivisionId')}
+                                    label="Subdivision"
                                     className={styles.field}
                                     fullWidth
-                                    defaultValue={leaveRequest?.approvalRequest?.approver?.id || ""}
+                                    defaultValue={employee?.subdivision.id || ""}
                                     onChange={(e) => {
-                                        setValue('approverId', e.target.value as number);
+                                        setValue('subdivisionId', e.target.value as number);
                                     }}
                                 >
-                                    {approvers && approvers.map((approver) => (
-                                        <MenuItem key={approver.id} value={approver.id}>
-                                            {approver.fullName} - {approver.role}
+                                    {subdivisions && subdivisions.map((subdivision) => (
+                                        <MenuItem key={subdivision.id} value={subdivision.id}>
+                                            {subdivision.name}
                                         </MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                {...register('startDate')}
-                                className={styles.field}
-                                label="Start Date"
-                                type="date"
-                                fullWidth
-                                InputLabelProps={{ shrink: true }}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                {...register('endDate')}
-                                className={styles.field}
-                                label="End Date"
-                                type="date"
-                                fullWidth
-                                InputLabelProps={{ shrink: true }}
-                            />
+                        <Grid item xs={12}>
+                            <FormControl fullWidth>
+                                <InputLabel>Position</InputLabel>
+                                <Select
+                                    {...register('positionId')}
+                                    label="Position"
+                                    className={styles.field}
+                                    fullWidth
+                                    defaultValue={employee?.position.id || ""}
+                                    onChange={(e) => {
+                                        setValue('positionId', e.target.value as number);
+                                    }}
+                                >
+                                    {positions && positions.map((position) => (
+                                        <MenuItem key={position.id} value={position.id}>
+                                            {position.name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </Grid>
                         <Grid item xs={12}>
                             <FormControl fullWidth>
@@ -126,26 +155,23 @@ const UpdateLeaveRequestForm: React.FC<Props> = ({ id }) => {
                                     label="Status"
                                     className={styles.field}
                                     fullWidth
-                                    defaultValue={leaveRequest?.status || ""}
+                                    defaultValue={employee?.status || false}
                                     onChange={(e) => {
-                                        setValue('status', e.target.value as LeaveRequestStatus);
+                                        setValue('status', e.target.value as boolean);
                                     }}
                                 >
-                                    {Object.values(LeaveRequestStatus).map((status) => (
-                                        <MenuItem key={status} value={status}>
-                                            {status}
-                                        </MenuItem>
-                                    ))}
+                                     <MenuItem value="true">Active</MenuItem>
+                                     <MenuItem value="false">Inactive</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
-                                {...register('comment')}
+                                {...register('outOfOfficeBalance')}
                                 className={styles.field}
-                                label="Comment"
+                                label="Out of Office Balance"
                                 fullWidth
-                                InputLabelProps={{ shrink: true }}
+                                type="number"
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -159,4 +185,4 @@ const UpdateLeaveRequestForm: React.FC<Props> = ({ id }) => {
         </div>
     );
 };
-export default UpdateLeaveRequestForm;
+export default UpdateEmployeeForm;

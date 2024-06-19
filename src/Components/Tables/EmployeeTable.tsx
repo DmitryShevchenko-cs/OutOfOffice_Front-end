@@ -4,6 +4,7 @@ import { Table, TableHead, TableBody, TableRow, TableCell, TableContainer, Table
 import { UserType } from '../../types/User';
 import { RootState } from '../../redux/store';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 interface TableProps {
     employees: Employee[];
@@ -24,8 +25,8 @@ enum SortField {
 const EmployeeTable: React.FC<TableProps> = ({ employees, onDelete }) => {
     const [sortBy, setSortBy] = useState<SortField>(SortField.ID);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-    const role = useSelector((state: RootState) => state.auth.role); 
-    
+    const role = useSelector((state: RootState) => state.auth.role);
+
     // Вспомогательная функция для получения значения поля по пути
     const getFieldByPath = (obj: any, path: string): any => {
         const keys = path.split('.');
@@ -61,10 +62,10 @@ const EmployeeTable: React.FC<TableProps> = ({ employees, onDelete }) => {
 
     return (
         <TableContainer>
-            <Table sx={{backgroundColor:"white", borderRadius:"10px"}}>
+            <Table sx={{ backgroundColor: "white", borderRadius: "10px" }}>
                 <TableHead>
                     <TableRow>
-                        <TableCell  sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
+                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
                             <TableSortLabel
                                 active={sortBy === SortField.ID}
                                 direction={sortBy === SortField.ID ? sortDirection : 'asc'}
@@ -73,7 +74,7 @@ const EmployeeTable: React.FC<TableProps> = ({ employees, onDelete }) => {
                                 ID
                             </TableSortLabel>
                         </TableCell>
-                        <TableCell  sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
+                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
                             <TableSortLabel
                                 active={sortBy === SortField.FULL_NAME}
                                 direction={sortBy === SortField.FULL_NAME ? sortDirection : 'asc'}
@@ -82,8 +83,8 @@ const EmployeeTable: React.FC<TableProps> = ({ employees, onDelete }) => {
                                 Full Name
                             </TableSortLabel>
                         </TableCell>
-                        <TableCell  sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>Photo</TableCell>
-                        <TableCell  sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
+                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>Photo</TableCell>
+                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
                             <TableSortLabel
                                 active={sortBy === SortField.SUBDIVISION}
                                 direction={sortBy === SortField.SUBDIVISION ? sortDirection : 'asc'}
@@ -92,7 +93,7 @@ const EmployeeTable: React.FC<TableProps> = ({ employees, onDelete }) => {
                                 Subdivision
                             </TableSortLabel>
                         </TableCell>
-                        <TableCell  sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
+                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
                             <TableSortLabel
                                 active={sortBy === SortField.POSITION}
                                 direction={sortBy === SortField.POSITION ? sortDirection : 'asc'}
@@ -101,7 +102,7 @@ const EmployeeTable: React.FC<TableProps> = ({ employees, onDelete }) => {
                                 Position
                             </TableSortLabel>
                         </TableCell>
-                        <TableCell  sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
+                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
                             <TableSortLabel
                                 active={sortBy === SortField.STATUS}
                                 direction={sortBy === SortField.STATUS ? sortDirection : 'asc'}
@@ -110,7 +111,7 @@ const EmployeeTable: React.FC<TableProps> = ({ employees, onDelete }) => {
                                 Status
                             </TableSortLabel>
                         </TableCell>
-                        <TableCell  sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
+                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
                             <TableSortLabel
                                 active={sortBy === SortField.OUT_OF_OFFICE_BALANCE}
                                 direction={sortBy === SortField.OUT_OF_OFFICE_BALANCE ? sortDirection : 'asc'}
@@ -119,7 +120,7 @@ const EmployeeTable: React.FC<TableProps> = ({ employees, onDelete }) => {
                                 Out Of Office Balance
                             </TableSortLabel>
                         </TableCell>
-                        <TableCell  sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)"}}>
+                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
                             <TableSortLabel
                                 active={sortBy === SortField.HR_MANAGER}
                                 direction={sortBy === SortField.HR_MANAGER ? sortDirection : 'asc'}
@@ -134,7 +135,11 @@ const EmployeeTable: React.FC<TableProps> = ({ employees, onDelete }) => {
                 <TableBody>
                     {sortedEmployees.map((employee) => (
                         <TableRow key={employee.id}>
-                            <TableCell>{employee.id}</TableCell>
+                            <TableCell>
+                                <Link to={`/employee/${employee.id}`}>
+                                    {employee.id}
+                                </Link>
+                            </TableCell>
                             <TableCell>{employee.fullName}</TableCell>
                             <TableCell><img src={employee.photo} alt="photo" /></TableCell>
                             <TableCell>{employee.subdivision.name}</TableCell>
@@ -144,8 +149,14 @@ const EmployeeTable: React.FC<TableProps> = ({ employees, onDelete }) => {
                             <TableCell>{employee.hrManager?.fullName}</TableCell>
                             {canEditOrDelete(role) && (
                                 <TableCell>
-                                    <Button sx={{border: "1px solid blue", marginRight: "5px" }}>Edit</Button>
-                                    <Button sx={{border: "1px solid red", color:"red"}} onClick={() => onDelete(employee.id)}>Deactivate</Button>
+                                    <Button
+                                        sx={{ border: "1px solid blue", marginRight: "5px" }}
+                                        component={Link}
+                                        to={`/update-employee/${employee.id}`}
+                                    >
+                                        Edit
+                                    </Button>
+                                    <Button sx={{ border: "1px solid red", color: "red" }} onClick={() => onDelete(employee.id)}>Deactivate</Button>
                                 </TableCell>
                             )}
                         </TableRow>

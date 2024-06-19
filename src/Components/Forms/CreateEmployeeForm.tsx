@@ -2,16 +2,16 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useCreateEmployeeMutation } from "../../services/EmployeeService";
 import { Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
 import styles from "../../scss/updateForm.module.scss";
-import { ICreateEmployee } from "../../types/Emloyees";
+import { CreateEmployee } from "../../types/Emloyees";
 import { useGetPositionsQuery, useGetSubdivisionsQuery } from "../../services/SelectionService";
 
 const CreateUserForm: React.FC = () => {
-  const { handleSubmit, register, setValue } = useForm<ICreateEmployee>();
+  const { handleSubmit, register, setValue } = useForm<CreateEmployee>();
   const [createUser] = useCreateEmployeeMutation(); 
   const { data: subdivisions, isLoading: isLoadingsubdivisions } = useGetSubdivisionsQuery(null);
   const { data: positions, isLoading: isLoadingpositions } = useGetPositionsQuery(null);
 
-  const onSubmit: SubmitHandler<ICreateEmployee> = async (data: ICreateEmployee) => {
+  const onSubmit: SubmitHandler<CreateEmployee> = async (data: CreateEmployee) => {
     try {
       await createUser(data).unwrap();
       console.log("User created successfully");
