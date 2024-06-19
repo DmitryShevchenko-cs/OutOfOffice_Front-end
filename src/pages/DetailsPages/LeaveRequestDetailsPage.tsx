@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import LeaveRequestDetails from "../Components/DetailInfoComponents/LeaveRequestDetails";
+import LeaveRequestDetails from "../../Components/DetailInfoComponents/LeaveRequestDetails";
 
 const LeaveRequestDetailsPage: React.FC = () => {
     const { id } = useParams<string>(); 

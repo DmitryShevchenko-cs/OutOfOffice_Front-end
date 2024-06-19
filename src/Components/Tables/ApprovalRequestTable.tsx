@@ -90,7 +90,6 @@ const ApprovalRequestTable: React.FC<TableProps> = ({ approvalRequests, onApprov
                                 Approver
                             </TableSortLabel>
                         </TableCell>
-                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>Photo</TableCell>
                         <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
                             <TableSortLabel
                                 active={sortBy === SortField.STATUS}
@@ -118,7 +117,6 @@ const ApprovalRequestTable: React.FC<TableProps> = ({ approvalRequests, onApprov
                         <TableRow key={approvalRequest.id}>
                             <TableCell>{approvalRequest.id}</TableCell>
                             <TableCell>{approvalRequest.approver.fullName}</TableCell>
-                            <TableCell><img src={approvalRequest.approver.photo} alt="photo" /></TableCell>
                             <TableCell>{approvalRequest.approvalRequestStatus}</TableCell>
                             <TableCell>
                                 <Link to={`/leave-request-details/${approvalRequest.leaveRequest.id}`}>

@@ -4,12 +4,15 @@ import { Project } from "../types/Project";
 import { useDeactivateProjectMutation, useGetAllProjetsQuery } from "../services/ProjectService";
 import { Link } from "react-router-dom";
 import { Button } from "@mui/material";
+import { RootState } from "../redux/store";
+import { useSelector } from "react-redux";
+import { UserType } from "../types/User";
 
 const ProjectsPage = () => {
 
   const {data: projectsList } = useGetAllProjetsQuery(null);
   const [projects, setProjects] = useState<Project[]>([])
-
+  const role = useSelector((state: RootState) => state.auth.role);
   const [deleteProject] = useDeactivateProjectMutation();
 
   useEffect(() => {
@@ -32,6 +35,7 @@ const ProjectsPage = () => {
       <div>
         <h1>Projects Page</h1>
       </div>     
+      {(role === UserType.Admin || role === UserType.ProjectManager) && (
       <Button
         component={Link}
         to="/create-project"
@@ -41,6 +45,7 @@ const ProjectsPage = () => {
       >
         Create Project
       </Button>
+       )}
       <ProjectTable projects={projects} onDelete={handleDelete}/>
     </>
   );

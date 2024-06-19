@@ -1,12 +1,12 @@
-import { useEffect} from "react";
-import { LeaveRequestStatus, UpdateLeaveRequest } from "../../types/LeaveRequest";
+import { useEffect } from "react";
 import { Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useGetLeaveRequestQuery, useUpdateLeaveRequestMutation } from "../../services/LeaveRequestService";
-import styles from "../../scss/updateForm.module.scss";
-import { formatDate } from "../../Helpers/FormatDateHelper";
-import { useGetApproversQuery } from "../../services/ManagerService";
-import { useGetAbsenceReasonQuery } from "../../services/SelectionService";
+import styles from "../../../scss/updateForm.module.scss";
+import { formatDate } from "../../../Helpers/FormatDateHelper";
+import { useGetProjectManagersQuery } from "../../../services/ManagerService";
+import { useGetProjectTypeQuery } from "../../../services/GetSelectionService";
+import { UpdateProject } from "../../../types/Project";
+import { useGetProjectQuery, useUpdateProjectMutation } from "../../../services/ProjectService";
 
 interface Props {
     id: string;
@@ -14,36 +14,37 @@ interface Props {
 
 const UpdateLeaveRequestForm: React.FC<Props> = ({ id }) => {
 
-    const { data: leaveRequest, isLoading: isLoadingRequests } = useGetLeaveRequestQuery(Number(id));
-    const { data: approvers, isLoading: isLoadingApprovers } = useGetApproversQuery(null);
-    const { data: reasons, isLoading: isLoadingReasons } = useGetAbsenceReasonQuery(null);
-    const [updateLeaveRequest] = useUpdateLeaveRequestMutation();
-    const { handleSubmit, register, reset, setValue } = useForm<UpdateLeaveRequest>();
+    const { data: project, isLoading: isLoadingProjects } = useGetProjectQuery(Number(id));
+    const { data: projectManagers, isLoading: isLoadingManagers } = useGetProjectManagersQuery(null);
+    const { data: types, isLoading: isLoadingTypes } = useGetProjectTypeQuery(null);
+
+    const [updateProject] = useUpdateProjectMutation();
+    const { handleSubmit, register, reset, setValue } = useForm<UpdateProject>();
 
     useEffect(() => {
-        if (leaveRequest) {
+        if (project) {
             reset({
-                id: leaveRequest.id,
-                absenceReasonId: leaveRequest.absenceReason?.id ?? 0,
-                approverId: leaveRequest.approvalRequest?.approver?.id ?? 0,
-                startDate: formatDate(leaveRequest.startDate),
-                endDate: formatDate(leaveRequest.endDate),
-                status: leaveRequest.status,
-                comment: leaveRequest.comment || '',
+                id: project.id,
+                projectManagerId: project.projectManager?.id ?? 0,
+                projectTypeId: project.projectType?.id ?? 0,
+                startDate: formatDate(project.startDate),
+                endDate: formatDate(project.endDate),
+                comment: project.comment || '',
+                status: project.status,
             });
         }
-    }, [leaveRequest, reset]);
+    }, [project, reset]);
 
-    const onSubmit: SubmitHandler<UpdateLeaveRequest> = async (data: UpdateLeaveRequest) => {
+    const onSubmit: SubmitHandler<UpdateProject> = async (data: UpdateProject) => {
         try {
-            await updateLeaveRequest(data).unwrap();
+            await updateProject(data).unwrap();
             console.log(data);
         } catch (error) {
-            console.error('Failed to update leave request:', error);
+            console.error('Failed to update project:', error);
         }
     };
 
-    if (isLoadingRequests || isLoadingApprovers || isLoadingReasons) {
+    if (isLoadingProjects || isLoadingManagers || isLoadingTypes) {
         return <div>Loading...</div>;
     }
 
@@ -51,27 +52,27 @@ const UpdateLeaveRequestForm: React.FC<Props> = ({ id }) => {
         <div className={styles.container}>
             <Paper elevation={4} classes={{ root: styles.root }}>
                 <Typography sx={{ marginBottom: "20px" }} classes={{ root: styles.title }} variant='h5'>
-                    Update Leave Request
+                    Update Project
                 </Typography>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <FormControl fullWidth>
-                                <InputLabel>Absence reason</InputLabel>
+                                <InputLabel>Project Manager</InputLabel>
                                 <Select
-                                    {...register('absenceReasonId')}
-                                    label="Absence Reason Id"
+                                    {...register('projectManagerId')}
+                                    label="Project Manager"
                                     className={styles.field}
                                     fullWidth
-                                    defaultValue={leaveRequest?.absenceReason?.id || ""}
+                                    defaultValue={project?.projectManager?.id || ""}
                                     onChange={(e) => {
-                                        setValue('absenceReasonId', e.target.value as number);
+                                        setValue('projectManagerId', e.target.value as number);
                                     }}
                                 >
-                                    {reasons && reasons.map((reason) => (
-                                        <MenuItem key={reason.id} value={reason.id}>
-                                            {reason.reasonDescription}
+                                    {projectManagers && projectManagers.map((manager) => (
+                                        <MenuItem key={manager.id} value={manager.id}>
+                                            {manager.fullName}
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -79,20 +80,20 @@ const UpdateLeaveRequestForm: React.FC<Props> = ({ id }) => {
                         </Grid>
                         <Grid item xs={12}>
                             <FormControl fullWidth>
-                                <InputLabel>Approver</InputLabel>
+                                <InputLabel>Project Type</InputLabel>
                                 <Select
-                                    {...register('approverId')}
-                                    label="Approver"
+                                    {...register('projectTypeId')}
+                                    label="Project Type"
                                     className={styles.field}
                                     fullWidth
-                                    defaultValue={leaveRequest?.approvalRequest?.approver?.id || ""}
+                                    defaultValue={project?.projectType?.id || ""}
                                     onChange={(e) => {
-                                        setValue('approverId', e.target.value as number);
+                                        setValue('projectTypeId', e.target.value as number);
                                     }}
                                 >
-                                    {approvers && approvers.map((approver) => (
-                                        <MenuItem key={approver.id} value={approver.id}>
-                                            {approver.fullName} - {approver.role}
+                                    {types && types.map((type) => (
+                                        <MenuItem key={type.id} value={type.id}>
+                                            {type.name}
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -119,27 +120,6 @@ const UpdateLeaveRequestForm: React.FC<Props> = ({ id }) => {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <FormControl fullWidth>
-                                <InputLabel>Status</InputLabel>
-                                <Select
-                                    {...register('status')}
-                                    label="Status"
-                                    className={styles.field}
-                                    fullWidth
-                                    defaultValue={leaveRequest?.status || ""}
-                                    onChange={(e) => {
-                                        setValue('status', e.target.value as LeaveRequestStatus);
-                                    }}
-                                >
-                                    {Object.values(LeaveRequestStatus).map((status) => (
-                                        <MenuItem key={status} value={status}>
-                                            {status}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={12}>
                             <TextField
                                 {...register('comment')}
                                 className={styles.field}
@@ -147,6 +127,24 @@ const UpdateLeaveRequestForm: React.FC<Props> = ({ id }) => {
                                 fullWidth
                                 InputLabelProps={{ shrink: true }}
                             />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <FormControl fullWidth>
+                                <InputLabel>Status</InputLabel>
+                                <Select
+                                    {...register('status')}
+                                    label="Status"
+                                    className={styles.field}
+                                    fullWidth
+                                    defaultValue={project?.status ? "true" : "false"}
+                                    onChange={(e) => {
+                                        setValue('status', e.target.value === "true");
+                                    }}
+                                >
+                                    <MenuItem value="true">Active</MenuItem>
+                                    <MenuItem value="false">Inactive</MenuItem>
+                                </Select>
+                            </FormControl>
                         </Grid>
                         <Grid item xs={12}>
                             <Button type="submit" size="large" variant="contained" fullWidth>

@@ -23,8 +23,8 @@ const ManagersPage = () => {
 
   const handleDelete = async (id: number) => {
     try{
-      setManagers(managers.filter((manager) => manager.id !== id));
       await deleteProject(id).unwrap();
+      setManagers(managers.filter((manager) => manager.id !== id));
     }catch (error: any) {
       console.error('Failed to approve request:', error.data || error.message);
     }

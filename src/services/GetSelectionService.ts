@@ -1,14 +1,13 @@
 import { api } from "../api/api";
 import { HttpMethodType } from "../types/HttpInfo";
-import { AbsenceReason } from "../types/LeaveRequest";
-import { Project } from "../types/Project";
-import { ProjectType } from "../types/Selections";
+import { AbsenceReason } from "../types/Selection";
+import { Selection } from "../types/Selection";
 
 export const Api = api.injectEndpoints({
   endpoints: (builder) => ({
     getAbsenceReason: builder.query<AbsenceReason[], null>({
       query: () => ({
-        url: "/api/selection/absence-reasons",
+        url: "/api/AbsenceReason",
         method: HttpMethodType.GET,
         responseHandler: async (response) => {
           if (!response.ok) {
@@ -19,9 +18,9 @@ export const Api = api.injectEndpoints({
         },
       }),
     }),
-    getProjectType: builder.query<ProjectType[], null>({
+    getProjectType: builder.query<Selection[], null>({
       query: () => ({
-        url: "/api/selection/project-type",
+        url: "/api/ProjectType",
         method: HttpMethodType.GET,
         responseHandler: async (response) => {
           if (!response.ok) {
@@ -32,9 +31,9 @@ export const Api = api.injectEndpoints({
         },
       }),
     }),
-    getSubdivisions: builder.query<ProjectType[], null>({
+    getSubdivisions: builder.query<Selection[], null>({
       query: () => ({
-        url: "/api/selection/subdivision",
+        url: "/api/Subdivision",
         method: HttpMethodType.GET,
         responseHandler: async (response) => {
           if (!response.ok) {
@@ -45,9 +44,9 @@ export const Api = api.injectEndpoints({
         },
       }),
     }),
-    getPositions: builder.query<ProjectType[], null>({
+    getPositions: builder.query<Selection[], null>({
       query: () => ({
-        url: "/api/selection/position",
+        url: "/api/Position",
         method: HttpMethodType.GET,
         responseHandler: async (response) => {
           if (!response.ok) {

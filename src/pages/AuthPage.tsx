@@ -5,7 +5,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useLoginMutation } from "../services/authService";
 import { IAuthInformation } from "../types/AuthInfo";
 import styles from "../scss/authPage.module.scss";
-import { Button, Checkbox,  Paper, TextField, Typography } from "@mui/material";
+import { Button, Checkbox,  FormHelperText,  Paper, TextField, Typography } from "@mui/material";
 
 
 const AuthPage = () => {
@@ -14,7 +14,7 @@ const AuthPage = () => {
   const [authorize] = useLoginMutation();
   const { userLogin } = useActions();
 
-  const { handleSubmit, register} = useForm<ILoginData>({
+  const { handleSubmit, register, formState: { errors }} = useForm<ILoginData>({
     defaultValues: {
       login: "",
       password: "",
@@ -44,7 +44,6 @@ const AuthPage = () => {
 
   return (
     <div className={styles.container}>
-
       <Paper elevation={4} classes={{ root: styles.root }}>
         <Typography classes={{ root: styles.title }} variant='h5'>
           {auth}
@@ -52,23 +51,33 @@ const AuthPage = () => {
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
-            {...register("login")}
+            {...register("login", {
+              required: "Login is required"
+            })}
             className={styles.field}
             label={loginLabel}
             fullWidth
+            error={!!errors.login}
+            helperText={errors.login && <FormHelperText error>{errors.login.message}</FormHelperText>}
           />
 
           <TextField
             type='password'
-            {...register("password")}
+            {...register("password", {
+              required: "Password is required"
+            })}
             className={styles.field}
             label={passwordLabel}
             fullWidth
+            error={!!errors.password}
+            helperText={errors.password && <FormHelperText error>{errors.password.message}</FormHelperText>}
           />
+
           <div className={styles.isRemember}>
             <Checkbox {...register("isNeedToRemember")} />
             <p>{rememberMeLabel}</p>
           </div>
+
           <Button
             type='submit'
             size='large'
@@ -79,7 +88,6 @@ const AuthPage = () => {
           </Button>
         </form>
       </Paper>
-
     </div>
   );
 };

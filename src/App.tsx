@@ -9,20 +9,24 @@ import EmployeesPage from './pages/EmployeesPage';
 import LeaveRequestsPage from './pages/LeaveRequestsPage';
 import ManagersPage from './pages/ManagersPage';
 import ProjectsPage from './pages/ProjectsPage';
-import CreateEmployeePage from './pages/CreateEmployeePage';
-import LeaveRequestDetailsPage from './pages/LeaveRequestDetailsPage';
+import CreateEmployeePage from './pages/CreatePages/CreateEmployeePage';
+import LeaveRequestDetailsPage from './pages/DetailsPages/LeaveRequestDetailsPage';
 import { UserType } from './types/User';
-import UpdateLeaveRequestPage from './pages/UpdateLeaveRequestPage';
-import CreateLeaveRequestPage from './pages/CreateLeaveRequestPage';
-import ProjectDetailsPage from './pages/ProjectDetailsPage';
-import UpdateProjectPage from './pages/UpdateProjectPage';
-import CreateProjectPage from './pages/CreateProjectPage';
-import EditProjectEmployees from './pages/EditProjectEmployees';
-import UpdateEmployeePage from './pages/UpdateEmployeePage';
-import EmployeeDetailsPage from './pages/EmployeeDetatilsPage';
-import ManagerDetailsPage from './pages/ManagerDetailsPage';
-import CreateManagerPage from './pages/CreateManagerPage';
-import UpdateManagerPage from './pages/UpdateManagerPage';
+import UpdateLeaveRequestPage from './pages/UpdatePages/UpdateLeaveRequestPage';
+import CreateLeaveRequestPage from './pages/CreatePages/CreateLeaveRequestPage';
+import ProjectDetailsPage from './pages/DetailsPages/ProjectDetailsPage';
+import UpdateProjectPage from './pages/UpdatePages/UpdateProjectPage';
+import CreateProjectPage from './pages/CreatePages/CreateProjectPage';
+import EditProjectEmployees from './pages/UpdatePages/UpdateProjectEmployees';
+import UpdateEmployeePage from './pages/UpdatePages/UpdateEmployeePage';
+import EmployeeDetailsPage from './pages/DetailsPages/EmployeeDetatilsPage';
+import ManagerDetailsPage from './pages/DetailsPages/ManagerDetailsPage';
+import CreateManagerPage from './pages/CreatePages/CreateManagerPage';
+import UpdateManagerPage from './pages/UpdatePages/UpdateManagerPage';
+import CreateAbsenceReason from './pages/CreatePages/CreateAbsenceReason';
+import CreatePositionPage from './pages/CreatePages/CreatePositionPage';
+import CreateSubdivisionPage from './pages/CreatePages/CreateSubdivisionPage';
+import CreateProjectTypePage from './pages/CreatePages/CreateProjectTypePage';
 
 function App() {
   
@@ -48,16 +52,16 @@ function App() {
           <Route index element={<CreateEmployeePage />} />
         </Route>
                 
-        <Route path="/managers" element={<ProtectedRoute allowedRoles={[UserType.Admin]} />}>
+        <Route path="/managers" element={<ProtectedRoute allowedRoles={[UserType.HrManager,UserType.Admin]} />}>
           <Route index element={<ManagersPage />} />
         </Route>
-        <Route path="/manager/:id" element={<ProtectedRoute allowedRoles={[UserType.Admin]} />}>
+        <Route path="/manager/:id" element={<ProtectedRoute allowedRoles={[UserType.HrManager,UserType.Admin]} />}>
           <Route index element={<ManagerDetailsPage />} />
         </Route>
-        <Route path="/create-manager" element={<ProtectedRoute allowedRoles={[UserType.Admin]} />}>
+        <Route path="/create-manager" element={<ProtectedRoute allowedRoles={[UserType.HrManager,UserType.Admin]} />}>
           <Route index element={<CreateManagerPage />} />
         </Route>
-        <Route path="/update-manager/:id" element={<ProtectedRoute allowedRoles={[UserType.Admin]} />}>
+        <Route path="/update-manager/:id" element={<ProtectedRoute allowedRoles={[UserType.HrManager,UserType.Admin]} />}>
           <Route index element={<UpdateManagerPage />} />
         </Route>
         
@@ -77,8 +81,6 @@ function App() {
           <Route index element={<EditProjectEmployees />} />
         </Route>
         
-        
-
         <Route path="/leave-requests" element={<ProtectedRoute allowedRoles={[UserType.Admin, UserType.HrManager, UserType.Employee, UserType.ProjectManager]} />}>
           <Route index element={<LeaveRequestsPage />} />
         </Route>
@@ -91,6 +93,22 @@ function App() {
         <Route path="/create-leave-request" element={<ProtectedRoute allowedRoles={[UserType.Employee]}/>}>
           <Route index element={<CreateLeaveRequestPage />} />
         </Route>
+
+        <Route path="/create-absence-reason" element={<ProtectedRoute allowedRoles={[UserType.Admin, UserType.HrManager]}/>}>
+          <Route index element={<CreateAbsenceReason />} />
+        </Route>
+        <Route path="/create-position" element={<ProtectedRoute allowedRoles={[UserType.Admin, UserType.HrManager]}/>}>
+          <Route index element={<CreatePositionPage />} />
+        </Route>
+        <Route path="/create-subdivision" element={<ProtectedRoute allowedRoles={[UserType.Admin, UserType.HrManager]}/>}>
+          <Route index element={<CreateSubdivisionPage />} />
+        </Route>
+        <Route path="/create-project-type" element={<ProtectedRoute allowedRoles={[UserType.Admin, UserType.ProjectManager]}/>}>
+          <Route index element={<CreateProjectTypePage />} />
+        </Route>
+
+
+
       </Route>
       
       <Route path="/" element={<Layout />}>

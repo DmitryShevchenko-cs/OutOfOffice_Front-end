@@ -1,92 +1,47 @@
-import { useEffect } from "react";
-import { Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
-import styles from "../../scss/updateForm.module.scss";
-import { formatDate } from "../../Helpers/FormatDateHelper";
-import { useGetProjectManagersQuery } from "../../services/ManagerService";
-import { useGetProjectTypeQuery } from "../../services/SelectionService";
-import { useGetProjectQuery, useUpdateProjectMutation } from "../../services/ProjectService";
-import { UpdateProject } from "../../types/Project";
+import styles from "../../../scss/updateForm.module.scss";
+import { Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
+import { useCreateProjectMutation } from "../../../services/ProjectService";
+import { CreateProject } from "../../../types/Project";
+import { useGetProjectTypeQuery } from "../../../services/GetSelectionService";
 
-interface Props {
-    id: string;
-}
 
-const UpdateLeaveRequestForm: React.FC<Props> = ({ id }) => {
-
-    const { data: project, isLoading: isLoadingProjects } = useGetProjectQuery(Number(id));
-    const { data: projectManagers, isLoading: isLoadingManagers } = useGetProjectManagersQuery(null);
+const CreateLeaveRequestForm: React.FC = () => {
     const { data: types, isLoading: isLoadingTypes } = useGetProjectTypeQuery(null);
+    const [createProject] = useCreateProjectMutation();
 
-    const [updateProject] = useUpdateProjectMutation();
-    const { handleSubmit, register, reset, setValue } = useForm<UpdateProject>();
+    const { handleSubmit, register, setValue, formState: { errors } } = useForm<CreateProject>();
 
-    useEffect(() => {
-        if (project) {
-            reset({
-                id: project.id,
-                projectManagerId: project.projectManager?.id ?? 0,
-                projectTypeId: project.projectType?.id ?? 0,
-                startDate: formatDate(project.startDate),
-                endDate: formatDate(project.endDate),
-                comment: project.comment || '',
-                status: project.status,
-            });
-        }
-    }, [project, reset]);
 
-    const onSubmit: SubmitHandler<UpdateProject> = async (data: UpdateProject) => {
+    const onSubmit: SubmitHandler<CreateProject> = async (data: CreateProject) => {
         try {
-            await updateProject(data).unwrap();
+            await createProject(data).unwrap();
             console.log(data);
         } catch (error) {
-            console.error('Failed to update project:', error);
+            console.error('Failed to create project:', error);
         }
     };
-
-    if (isLoadingProjects || isLoadingManagers || isLoadingTypes) {
+    
+    if (isLoadingTypes) {
         return <div>Loading...</div>;
     }
-
     return (
         <div className={styles.container}>
             <Paper elevation={4} classes={{ root: styles.root }}>
-                <Typography sx={{ marginBottom: "20px" }} classes={{ root: styles.title }} variant='h5'>
-                    Update Project
+                <Typography sx={{ marginBottom: '20px' }} classes={{ root: styles.title }} variant='h5'>
+                    Create Project
                 </Typography>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <FormControl fullWidth>
-                                <InputLabel>Project Manager</InputLabel>
-                                <Select
-                                    {...register('projectManagerId')}
-                                    label="Project Manager"
-                                    className={styles.field}
-                                    fullWidth
-                                    defaultValue={project?.projectManager?.id || ""}
-                                    onChange={(e) => {
-                                        setValue('projectManagerId', e.target.value as number);
-                                    }}
-                                >
-                                    {projectManagers && projectManagers.map((manager) => (
-                                        <MenuItem key={manager.id} value={manager.id}>
-                                            {manager.fullName}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.projectTypeId}>
                                 <InputLabel>Project Type</InputLabel>
                                 <Select
-                                    {...register('projectTypeId')}
+                                    {...register('projectTypeId', { required: 'Project Type is required' })}
                                     label="Project Type"
                                     className={styles.field}
                                     fullWidth
-                                    defaultValue={project?.projectType?.id || ""}
                                     onChange={(e) => {
                                         setValue('projectTypeId', e.target.value as number);
                                     }}
@@ -97,26 +52,31 @@ const UpdateLeaveRequestForm: React.FC<Props> = ({ id }) => {
                                         </MenuItem>
                                     ))}
                                 </Select>
+                                <Typography variant="caption" color="error">{errors.projectTypeId && errors.projectTypeId.message}</Typography>
                             </FormControl>
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                {...register('startDate')}
+                                {...register('startDate', { required: 'Start Date is required' })}
                                 className={styles.field}
                                 label="Start Date"
                                 type="date"
                                 fullWidth
                                 InputLabelProps={{ shrink: true }}
+                                error={!!errors.startDate}
+                                helperText={errors.startDate && errors.startDate.message}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                {...register('endDate')}
+                                {...register('endDate', { required: 'End Date is required' })}
                                 className={styles.field}
                                 label="End Date"
                                 type="date"
                                 fullWidth
                                 InputLabelProps={{ shrink: true }}
+                                error={!!errors.endDate}
+                                helperText={errors.endDate && errors.endDate.message}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -136,10 +96,6 @@ const UpdateLeaveRequestForm: React.FC<Props> = ({ id }) => {
                                     label="Status"
                                     className={styles.field}
                                     fullWidth
-                                    defaultValue={project?.status ? "true" : "false"}
-                                    onChange={(e) => {
-                                        setValue('status', e.target.value === "true");
-                                    }}
                                 >
                                     <MenuItem value="true">Active</MenuItem>
                                     <MenuItem value="false">Inactive</MenuItem>
@@ -148,7 +104,7 @@ const UpdateLeaveRequestForm: React.FC<Props> = ({ id }) => {
                         </Grid>
                         <Grid item xs={12}>
                             <Button type="submit" size="large" variant="contained" fullWidth>
-                                Update
+                                Create
                             </Button>
                         </Grid>
                     </Grid>
@@ -157,4 +113,4 @@ const UpdateLeaveRequestForm: React.FC<Props> = ({ id }) => {
         </div>
     );
 };
-export default UpdateLeaveRequestForm;
+export default CreateLeaveRequestForm;
