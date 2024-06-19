@@ -9,13 +9,6 @@ export interface ICurrentUserModel{
   photo: string | null
 }
 
-export interface ICreateUserModel{
-  login:string
-  password:string
-  fullName: string
-  photo: File | null
-}
-
 export enum UserType{
   Admin = "Admin",
   HrManager = "HrManager",

@@ -60,3 +60,7 @@ export interface CreateManager{
     password:string
     fullName: string
 }
+
+export interface UpdateManager extends CreateManager{
+    id:number
+}

@@ -29,7 +29,7 @@ const EmployeeTable: React.FC<TableProps> = ({ managers, onDelete }) => {
     };
 
     // Функция для сортировки сотрудников
-    const sortedEmployees = [...managers].sort((a, b) => {
+    const sortedManagers = [...managers].sort((a, b) => {
         const aValue = getFieldByPath(a, sortBy);
         const bValue = getFieldByPath(b, sortBy);
 
@@ -92,20 +92,24 @@ const EmployeeTable: React.FC<TableProps> = ({ managers, onDelete }) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {sortedEmployees.map((employee) => (
-                        <TableRow key={employee.id}>
+                    {sortedManagers.map((manager) => (
+                        <TableRow key={manager.id}>
                              <TableCell>
-                                <Link to={`/manager/${employee.id}`}>
-                                    {employee.id}
+                                <Link to={`/manager/${manager.id}`}>
+                                    {manager.id}
                                 </Link>
                             </TableCell>
-                            <TableCell>{employee.fullName}</TableCell>
-                            <TableCell><img src={employee.photo} alt="photo" /></TableCell>
-                            <TableCell>{employee.role}</TableCell>
+                            <TableCell>{manager.fullName}</TableCell>
+                            <TableCell><img src={manager.photo} alt="photo" /></TableCell>
+                            <TableCell>{manager.role}</TableCell>
                             {canEditOrDelete(role) && (
                                 <TableCell>
-                                    <Button sx={{border: "1px solid blue", marginRight: "5px" }} >Edit</Button>
-                                    <Button sx={{ border: "1px solid red", color: "red" }} onClick={() => onDelete(employee.id)}>Delete</Button>
+                                    <Button sx={{ border: "1px solid green", color: "green", marginRight:"5px"}}
+                                        component={Link}
+                                        to={`/update-manager/${manager.id}`}
+                                    >
+                                        Edit manager</Button>
+                                    <Button sx={{ border: "1px solid red", color: "red" }} onClick={() => onDelete(manager.id)}>Delete</Button>
                                 </TableCell>
                             )}
                         </TableRow>
