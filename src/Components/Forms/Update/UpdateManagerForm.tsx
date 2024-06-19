@@ -1,9 +1,9 @@
 import { useEffect} from "react";
 import { Button, Grid, Paper, TextField, Typography } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
-import styles from "../../scss/updateForm.module.scss";
-import { UpdateManager } from "../../types/Emloyees";
-import { useGetDetailsManagerQuery, useUpdateManagerMutation, } from "../../services/ManagerService";
+import styles from "../../../scss/updateForm.module.scss";
+import { UpdateManager } from "../../../types/Emloyees";
+import { useGetDetailsManagerQuery, useUpdateManagerMutation, } from "../../../services/ManagerService";
 
 interface Props {
     id: string;

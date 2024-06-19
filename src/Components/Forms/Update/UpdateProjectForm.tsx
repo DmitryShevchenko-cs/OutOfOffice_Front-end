@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
-import styles from "../../scss/updateForm.module.scss";
-import { formatDate } from "../../Helpers/FormatDateHelper";
-import { useGetProjectManagersQuery } from "../../services/ManagerService";
-import { useGetProjectTypeQuery } from "../../services/SelectionService";
-import { useGetProjectQuery, useUpdateProjectMutation } from "../../services/ProjectService";
-import { UpdateProject } from "../../types/Project";
+import styles from "../../../scss/updateForm.module.scss";
+import { formatDate } from "../../../Helpers/FormatDateHelper";
+import { useGetProjectManagersQuery } from "../../../services/ManagerService";
+import { useGetProjectTypeQuery } from "../../../services/GetSelectionService";
+import { UpdateProject } from "../../../types/Project";
+import { useGetProjectQuery, useUpdateProjectMutation } from "../../../services/ProjectService";
 
 interface Props {
     id: string;

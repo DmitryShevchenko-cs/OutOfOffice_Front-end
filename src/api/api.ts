@@ -18,11 +18,3 @@ export const api = createApi({
   }),
   endpoints: (builder) => ({}),
 });
-
-export const translationApi = createApi({
-  reducerPath: "translationApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: process.env.REACT_APP_TRANSLATION_URL,    
-  }),
-  endpoints: (builder) => ({})
-});

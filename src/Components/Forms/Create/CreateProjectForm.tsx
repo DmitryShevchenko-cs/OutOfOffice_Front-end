@@ -1,22 +1,21 @@
-import { CreateLeaveRequest } from "../../types/LeaveRequest";
 import { SubmitHandler, useForm } from "react-hook-form";
-import styles from "../../scss/updateForm.module.scss";
+import styles from "../../../scss/updateForm.module.scss";
 import { Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
-import { useCreateProjectMutation } from "../../services/ProjectService";
-import { CreateProject } from "../../types/Project";
-import { useGetProjectTypeQuery } from "../../services/SelectionService";
+import { useCreateProjectMutation } from "../../../services/ProjectService";
+import { CreateProject } from "../../../types/Project";
+import { useGetProjectTypeQuery } from "../../../services/GetSelectionService";
 
 
 const CreateLeaveRequestForm: React.FC = () => {
     const { data: types, isLoading: isLoadingTypes } = useGetProjectTypeQuery(null);
-    const [createLeaveRequest] = useCreateProjectMutation();
+    const [createProject] = useCreateProjectMutation();
 
     const { handleSubmit, register, setValue } = useForm<CreateProject>();
 
 
     const onSubmit: SubmitHandler<CreateProject> = async (data: CreateProject) => {
         try {
-            await createLeaveRequest(data).unwrap();
+            await createProject(data).unwrap();
             console.log(data);
         } catch (error) {
             console.error('Failed to create project:', error);
@@ -37,7 +36,7 @@ const CreateLeaveRequestForm: React.FC = () => {
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <FormControl fullWidth>
-                                <InputLabel>Absence reason</InputLabel>
+                                <InputLabel>Project types</InputLabel>
                                 <Select
                                     {...register('projectTypeId')}
                                     label="Absence Reason Id"

@@ -1,57 +1,37 @@
-import { useEffect} from "react";
-import { LeaveRequestStatus, UpdateLeaveRequest } from "../../types/LeaveRequest";
-import { Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
+import { useCreateLeaveRequestMutation } from "../../../services/LeaveRequestService";
+import { CreateLeaveRequest} from "../../../types/LeaveRequest";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useGetLeaveRequestQuery, useUpdateLeaveRequestMutation } from "../../services/LeaveRequestService";
-import styles from "../../scss/updateForm.module.scss";
-import { formatDate } from "../../Helpers/FormatDateHelper";
-import { useGetApproversQuery } from "../../services/ManagerService";
-import { useGetAbsenceReasonQuery } from "../../services/SelectionService";
+import styles from "../../../scss/updateForm.module.scss";
+import { Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
+import { useGetApproversQuery } from "../../../services/ManagerService";
+import { useGetAbsenceReasonQuery } from "../../../services/GetSelectionService";
 
-interface Props {
-    id: string;
-}
 
-const UpdateLeaveRequestForm: React.FC<Props> = ({ id }) => {
-
-    const { data: leaveRequest, isLoading: isLoadingRequests } = useGetLeaveRequestQuery(Number(id));
+const CreateLeaveRequestForm: React.FC = () => {
     const { data: approvers, isLoading: isLoadingApprovers } = useGetApproversQuery(null);
     const { data: reasons, isLoading: isLoadingReasons } = useGetAbsenceReasonQuery(null);
-    const [updateLeaveRequest] = useUpdateLeaveRequestMutation();
-    const { handleSubmit, register, reset, setValue } = useForm<UpdateLeaveRequest>();
+    const [createLeaveRequest] = useCreateLeaveRequestMutation();
 
-    useEffect(() => {
-        if (leaveRequest) {
-            reset({
-                id: leaveRequest.id,
-                absenceReasonId: leaveRequest.absenceReason?.id ?? 0,
-                approverId: leaveRequest.approvalRequest?.approver?.id ?? 0,
-                startDate: formatDate(leaveRequest.startDate),
-                endDate: formatDate(leaveRequest.endDate),
-                status: leaveRequest.status,
-                comment: leaveRequest.comment || '',
-            });
-        }
-    }, [leaveRequest, reset]);
+    const { handleSubmit, register, setValue } = useForm<CreateLeaveRequest>();
 
-    const onSubmit: SubmitHandler<UpdateLeaveRequest> = async (data: UpdateLeaveRequest) => {
+
+    const onSubmit: SubmitHandler<CreateLeaveRequest> = async (data: CreateLeaveRequest) => {
         try {
-            await updateLeaveRequest(data).unwrap();
+            await createLeaveRequest(data).unwrap();
             console.log(data);
         } catch (error) {
-            console.error('Failed to update leave request:', error);
+            console.error('Failed to create leave request:', error);
         }
     };
-
-    if (isLoadingRequests || isLoadingApprovers || isLoadingReasons) {
+    
+    if (isLoadingApprovers || isLoadingReasons) {
         return <div>Loading...</div>;
     }
-
     return (
         <div className={styles.container}>
             <Paper elevation={4} classes={{ root: styles.root }}>
                 <Typography sx={{ marginBottom: "20px" }} classes={{ root: styles.title }} variant='h5'>
-                    Update Leave Request
+                    Create Leave Request
                 </Typography>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -64,7 +44,6 @@ const UpdateLeaveRequestForm: React.FC<Props> = ({ id }) => {
                                     label="Absence Reason Id"
                                     className={styles.field}
                                     fullWidth
-                                    defaultValue={leaveRequest?.absenceReason?.id || ""}
                                     onChange={(e) => {
                                         setValue('absenceReasonId', e.target.value as number);
                                     }}
@@ -85,7 +64,6 @@ const UpdateLeaveRequestForm: React.FC<Props> = ({ id }) => {
                                     label="Approver"
                                     className={styles.field}
                                     fullWidth
-                                    defaultValue={leaveRequest?.approvalRequest?.approver?.id || ""}
                                     onChange={(e) => {
                                         setValue('approverId', e.target.value as number);
                                     }}
@@ -119,27 +97,6 @@ const UpdateLeaveRequestForm: React.FC<Props> = ({ id }) => {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <FormControl fullWidth>
-                                <InputLabel>Status</InputLabel>
-                                <Select
-                                    {...register('status')}
-                                    label="Status"
-                                    className={styles.field}
-                                    fullWidth
-                                    defaultValue={leaveRequest?.status || ""}
-                                    onChange={(e) => {
-                                        setValue('status', e.target.value as LeaveRequestStatus);
-                                    }}
-                                >
-                                    {Object.values(LeaveRequestStatus).map((status) => (
-                                        <MenuItem key={status} value={status}>
-                                            {status}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={12}>
                             <TextField
                                 {...register('comment')}
                                 className={styles.field}
@@ -150,7 +107,7 @@ const UpdateLeaveRequestForm: React.FC<Props> = ({ id }) => {
                         </Grid>
                         <Grid item xs={12}>
                             <Button type="submit" size="large" variant="contained" fullWidth>
-                                Update
+                                Create
                             </Button>
                         </Grid>
                     </Grid>
@@ -159,4 +116,4 @@ const UpdateLeaveRequestForm: React.FC<Props> = ({ id }) => {
         </div>
     );
 };
-export default UpdateLeaveRequestForm;
+export default CreateLeaveRequestForm;

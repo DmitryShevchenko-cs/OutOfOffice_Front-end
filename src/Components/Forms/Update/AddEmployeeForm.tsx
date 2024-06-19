@@ -1,8 +1,8 @@
 import { Button, Checkbox, FormControlLabel, FormGroup, Typography } from "@mui/material";
-import { useGetAllEmployeesQuery } from "../../services/EmployeeService";
-import { useAddEmployeesMutation, useGetProjectQuery } from "../../services/ProjectService";
-import { Employee } from "../../types/Emloyees";
-import { AddEmployees } from "../../types/Project";
+import { useGetAllEmployeesQuery} from "../../../services/EmployeeService";
+import { useAddEmployeesMutation, useGetProjectQuery } from "../../../services/ProjectService";
+import { Employee } from "../../../types/Emloyees";
+import { AddEmployees } from "../../../types/Project";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useEffect } from "react";
 

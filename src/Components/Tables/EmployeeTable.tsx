@@ -82,8 +82,7 @@ const EmployeeTable: React.FC<TableProps> = ({ employees, onDelete }) => {
                             >
                                 Full Name
                             </TableSortLabel>
-                        </TableCell>
-                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>Photo</TableCell>
+                        </TableCell>                
                         <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
                             <TableSortLabel
                                 active={sortBy === SortField.SUBDIVISION}
@@ -140,8 +139,7 @@ const EmployeeTable: React.FC<TableProps> = ({ employees, onDelete }) => {
                                     {employee.id}
                                 </Link>
                             </TableCell>
-                            <TableCell>{employee.fullName}</TableCell>
-                            <TableCell><img src={employee.photo} alt="photo" /></TableCell>
+                            <TableCell>{employee.fullName}</TableCell>                           
                             <TableCell>{employee.subdivision.name}</TableCell>
                             <TableCell>{employee.position.name}</TableCell>
                             <TableCell>{employee.status ? 'Active' : 'Inactive'}</TableCell>

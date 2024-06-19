@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import EmployeeTable from "../Components/Tables/EmployeeTable";
 import { Employee } from "../types/Emloyees";
-import { useDeactivateEmployeeMutation, useGetAllEmployeesQuery } from "../services/EmployeeService";
+import { useDeactivateEmployeeMutation, useGetEmployeesQuery } from "../services/EmployeeService";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -10,7 +10,7 @@ import { UserType } from "../types/User";
 
 const EmployeesPage = () => {
 
-  const { data: employeesList } = useGetAllEmployeesQuery(null);
+  const { data: employeesList } = useGetEmployeesQuery(null);
   const role = useSelector((state: RootState) => state.auth.role);
   const [employees, setEmployees] = useState<Employee[]>([])
 

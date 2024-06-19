@@ -52,7 +52,7 @@ const EmployeeTable: React.FC<TableProps> = ({ managers, onDelete }) => {
     };
 
     const canEditOrDelete = (role: string) => {
-        return role === UserType.Admin;
+        return role === UserType.Admin || UserType.HrManager;
     };
 
     return (
@@ -78,7 +78,6 @@ const EmployeeTable: React.FC<TableProps> = ({ managers, onDelete }) => {
                                 Full Name
                             </TableSortLabel>
                         </TableCell>
-                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>Photo</TableCell>
                         <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
                             <TableSortLabel
                                 active={sortBy === SortField.FULL_NAME}
@@ -100,7 +99,6 @@ const EmployeeTable: React.FC<TableProps> = ({ managers, onDelete }) => {
                                 </Link>
                             </TableCell>
                             <TableCell>{manager.fullName}</TableCell>
-                            <TableCell><img src={manager.photo} alt="photo" /></TableCell>
                             <TableCell>{manager.role}</TableCell>
                             {canEditOrDelete(role) && (
                                 <TableCell>

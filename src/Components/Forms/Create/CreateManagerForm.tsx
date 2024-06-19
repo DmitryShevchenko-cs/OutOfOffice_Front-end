@@ -1,9 +1,9 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
-import styles from "../../scss/updateForm.module.scss";
-import { CreateManager } from "../../types/Emloyees";
-import { useCreateHrManagerMutation, useCreateProjectManagerMutation } from "../../services/ManagerService";
-import { UserType } from "../../types/User";
+import styles from "../../../scss/updateForm.module.scss";
+import { CreateManager } from "../../../types/Emloyees";
+import { useCreateHrManagerMutation, useCreateProjectManagerMutation } from "../../../services/ManagerService";
+import { UserType } from "../../../types/User";
 
 interface FormModel {
     manager: CreateManager
@@ -11,7 +11,7 @@ interface FormModel {
 }
 
 const CreateManagerForm: React.FC = () => {
-    const { handleSubmit, register, setValue } = useForm<FormModel>();
+    const { handleSubmit, register} = useForm<FormModel>();
     const [createProjectManager] = useCreateProjectManagerMutation();
     const [createHrManager] = useCreateHrManagerMutation();
 

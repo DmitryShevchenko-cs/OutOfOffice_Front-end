@@ -4,7 +4,7 @@ import { HttpMethodType } from "../types/HttpInfo";
 
 export const Api = api.injectEndpoints({
   endpoints: (builder) => ({
-    getAllEmployees: builder.query<Employee[],null>({
+    getEmployees: builder.query<Employee[],null>({
         query: () => ({
           url: "/api/employee",
           method: HttpMethodType.GET,
@@ -17,6 +17,19 @@ export const Api = api.injectEndpoints({
           },
         }),
     }),
+    getAllEmployees: builder.query<Employee[],null>({
+      query: () => ({
+        url: "/api/employee/all",
+        method: HttpMethodType.GET,
+        responseHandler: async (response) => {
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP error! Status: ${response.status}, ${errorText}`);
+            }
+            return response.json();
+        },
+      }),
+  }),
     getEmployee: builder.query<Employee,number>({
       query: (employeeId) => ({
         url: `/api/employee/${employeeId}`,
@@ -75,5 +88,5 @@ export const Api = api.injectEndpoints({
   }),
 });
 
-export const { useGetAllEmployeesQuery, useDeactivateEmployeeMutation, 
+export const { useGetEmployeesQuery, useGetAllEmployeesQuery, useDeactivateEmployeeMutation, 
   useCreateEmployeeMutation, useGetEmployeeQuery, useUpdateEmployeeMutation} = Api;

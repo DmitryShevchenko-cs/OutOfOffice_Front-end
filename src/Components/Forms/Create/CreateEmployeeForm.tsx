@@ -1,9 +1,9 @@
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useCreateEmployeeMutation } from "../../services/EmployeeService";
+import { useCreateEmployeeMutation } from "../../../services/EmployeeService";
 import { Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
-import styles from "../../scss/updateForm.module.scss";
-import { CreateEmployee } from "../../types/Emloyees";
-import { useGetPositionsQuery, useGetSubdivisionsQuery } from "../../services/SelectionService";
+import styles from "../../../scss/updateForm.module.scss";
+import { CreateEmployee } from "../../../types/Emloyees";
+import { useGetPositionsQuery, useGetSubdivisionsQuery } from "../../../services/GetSelectionService";
 
 const CreateUserForm: React.FC = () => {
   const { handleSubmit, register, setValue } = useForm<CreateEmployee>();

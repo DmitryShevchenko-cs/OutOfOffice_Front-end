@@ -1,16 +1,15 @@
 import { Project } from "./Project";
 import { UserType } from "./User";
-import { Position, Subdivision } from "./Selections";
+import { Selection } from "./Selection";
 
 export interface BaseEmployee{
     id: number
     fullName: string
-    photo: string
 }
 
 export interface Employee extends BaseEmployee {
-    subdivision: Subdivision
-    position: Position
+    subdivision: Selection
+    position: Selection
     status: boolean
     outOfOfficeBalance: number
     hrManager: HrManager | null

@@ -1,5 +1,6 @@
 import { ApprovalRequest } from "./ApprovalRequest";
 import { Employee } from "./Emloyees";
+import { AbsenceReason } from "./Selection";
 
 export interface LeaveRequest {
     id: number
@@ -10,11 +11,6 @@ export interface LeaveRequest {
     endDate: Date
     status: LeaveRequestStatus
     comment: string
-}
-
-export interface AbsenceReason {
-    id: number,
-    reasonDescription: string
 }
 
 export enum LeaveRequestStatus{

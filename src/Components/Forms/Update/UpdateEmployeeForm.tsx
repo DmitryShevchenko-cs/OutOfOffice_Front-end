@@ -1,12 +1,11 @@
 import { useEffect} from "react";
-import { LeaveRequestStatus, UpdateLeaveRequest } from "../../types/LeaveRequest";
 import { Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
-import styles from "../../scss/updateForm.module.scss";
-import { useGetPositionsQuery, useGetSubdivisionsQuery } from "../../services/SelectionService";
-import { useGetEmployeeQuery, useUpdateEmployeeMutation } from "../../services/EmployeeService";
-import { UpdateEmployee } from "../../types/Emloyees";
-import { useGetHrManagersQuery } from "../../services/ManagerService";
+import styles from "../../../scss/updateForm.module.scss";
+import { useGetPositionsQuery, useGetSubdivisionsQuery } from "../../../services/GetSelectionService";
+import { useGetEmployeeQuery, useUpdateEmployeeMutation } from "../../../services/EmployeeService";
+import { UpdateEmployee } from "../../../types/Emloyees";
+import { useGetHrManagersQuery } from "../../../services/ManagerService";
 
 interface Props {
     id: string;

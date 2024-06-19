@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import UpdateEmployeeForm from "../Components/Forms/UpdateEmployeeForm";
+import UpdateEmployeeForm from "../../Components/Forms/Update/UpdateEmployeeForm";
 
 const UpdateEmployeePage: React.FC = () => {
     const { id } = useParams<string>(); 
