@@ -21,7 +21,7 @@ const ProjectDetails: React.FC<Props> = ({ id }) => {
   return (
     <Paper elevation={3} style={{ padding: 20, marginTop: 20 }}>
       <Typography variant="h5" gutterBottom>
-        <strong>Leave Request Details - ID: {projects.id}</strong>
+        <strong>Project Details - ID: {projects.id}</strong>
       </Typography>
       <Grid container spacing={2}>
         <Grid item xs={12}>

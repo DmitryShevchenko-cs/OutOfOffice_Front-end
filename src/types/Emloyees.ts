@@ -1,6 +1,6 @@
 import { Project } from "./Project";
 import { UserType } from "./User";
-import { Position, Subdivision } from "./selections";
+import { Position, Subdivision } from "./Selections";
 
 export interface BaseEmployee{
     id: number
@@ -26,6 +26,11 @@ export interface HrManager extends BaseManager{
 }
 
 export interface ProjectManager extends BaseManager{
+    projects: Project[]
+}
+
+export interface DetailManager extends BaseManager{
+    partners: Employee[]
     projects: Project[]
 }
 

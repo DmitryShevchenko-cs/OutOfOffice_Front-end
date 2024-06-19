@@ -1,5 +1,5 @@
 import { Employee, ProjectManager } from "./Emloyees";
-import { ProjectType } from "./selections";
+import { ProjectType } from "./Selections";
 
 export interface Project {
     id: number

@@ -20,6 +20,7 @@ import CreateProjectPage from './pages/CreateProjectPage';
 import EditProjectEmployees from './pages/EditProjectEmployees';
 import UpdateEmployeePage from './pages/UpdateEmployeePage';
 import EmployeeDetailsPage from './pages/EmployeeDetatilsPage';
+import ManagerDetailsPage from './pages/ManagerDetailsPage';
 
 function App() {
   
@@ -47,6 +48,9 @@ function App() {
                 
         <Route path="/managers" element={<ProtectedRoute allowedRoles={[UserType.Admin]} />}>
           <Route index element={<ManagersPage />} />
+        </Route>
+        <Route path="/manager/:id" element={<ProtectedRoute allowedRoles={[UserType.Admin]} />}>
+          <Route index element={<ManagerDetailsPage />} />
         </Route>
         
         <Route path="/projects" element={<ProtectedRoute allowedRoles={[UserType.Admin, UserType.ProjectManager, UserType.HrManager, UserType.Employee]} />}>

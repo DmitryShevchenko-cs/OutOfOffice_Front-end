@@ -4,6 +4,7 @@ import { BaseManager } from '../../types/Emloyees';
 import { UserType } from '../../types/User';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
+import { Link } from 'react-router-dom';
 
 interface TableProps {
     managers: BaseManager[];
@@ -93,7 +94,11 @@ const EmployeeTable: React.FC<TableProps> = ({ managers, onDelete }) => {
                 <TableBody>
                     {sortedEmployees.map((employee) => (
                         <TableRow key={employee.id}>
-                            <TableCell>{employee.id}</TableCell>
+                             <TableCell>
+                                <Link to={`/manager/${employee.id}`}>
+                                    {employee.id}
+                                </Link>
+                            </TableCell>
                             <TableCell>{employee.fullName}</TableCell>
                             <TableCell><img src={employee.photo} alt="photo" /></TableCell>
                             <TableCell>{employee.role}</TableCell>

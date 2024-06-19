@@ -2,7 +2,7 @@ import { api } from "../api/api";
 import { HttpMethodType } from "../types/HttpInfo";
 import { AbsenceReason } from "../types/LeaveRequest";
 import { Project } from "../types/Project";
-import { ProjectType } from "../types/selections";
+import { ProjectType } from "../types/Selections";
 
 export const Api = api.injectEndpoints({
   endpoints: (builder) => ({
