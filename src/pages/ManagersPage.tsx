@@ -1,28 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { useGetAllManagersQuery } from "../services/ManagerService";
+import { useDelManagerMutation, useGetAllManagersQuery } from "../services/ManagerService";
 import { BaseManager } from "../types/Emloyees";
-import ManagersTable from "../Components/ManagersTable";
+import ManagersTable from "../Components/Tables/ManagersTable";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import { UserType } from "../types/User";
+import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const ManagersPage = () => {
 
   const {data: managersList } = useGetAllManagersQuery(null);
   const [managers, setManagers] = useState<BaseManager[]>([])
-  
+  const role = useSelector((state: RootState) => state.auth.role);
+  const [deleteProject] = useDelManagerMutation();
+
   useEffect(() => {
     if (managersList) {
       setManagers(managersList);
     }
   }, [managersList]);
 
-
-  const handleEdit = (id: number) => {
-    // Реализация редактирования
-    
-  };
-
-  const handleDelete = (id: number) => {
-    // Реализация удаления
-    setManagers(managers.filter((manager) => manager.id !== id));
+  const handleDelete = async (id: number) => {
+    try{
+      setManagers(managers.filter((manager) => manager.id !== id));
+      await deleteProject(id).unwrap();
+    }catch (error: any) {
+      console.error('Failed to approve request:', error.data || error.message);
+    }
   };
 
   return (
@@ -30,7 +35,18 @@ const ManagersPage = () => {
       <div>
         <h1>Managers Page</h1>
       </div>     
-      <ManagersTable managers={managers} onEdit={handleEdit} onDelete={handleDelete}/>
+      {(role === UserType.Admin || role === UserType.HrManager) && (
+        <Button
+          component={Link}
+          to="/create-manager"
+          variant="contained"
+          color="primary"
+          sx={{ mt: 2, mb: 2 }}
+        >
+          Create manager
+        </Button>
+      )}
+      <ManagersTable managers={managers} onDelete={handleDelete}/>
     </>
   );
 };

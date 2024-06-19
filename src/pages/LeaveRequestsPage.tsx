@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import LeaveRequestTable from "../Components/LeaveRequestTable";
-import { useGetAllLeaveRequestsQuery } from "../services/LeaveRequestService";
+import LeaveRequestTable from "../Components/Tables/LeaveRequestTable";
+import { useDelLeaveRequestMutation, useGetAllLeaveRequestsQuery } from "../services/LeaveRequestService";
 import { LeaveRequest } from "../types/LeaveRequest";
+import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const LeaveRequestsPage = () => {
 
@@ -9,20 +11,23 @@ const LeaveRequestsPage = () => {
 
   const [leaveRequests, setleaveRequests] = useState<LeaveRequest[]>([])
 
+  const [deleteLeaveRequest] = useDelLeaveRequestMutation();
+
   useEffect(() => {
     if (leaveRequestList) {
       setleaveRequests(leaveRequestList);
     }
   }, [leaveRequestList]);
 
-  const handleEdit = (id: number) => {
-    // Реализация редактирования
+  const handleDelete = async (id: number) => {
+    try {
+      setleaveRequests(leaveRequests.filter((leaveRequest) => leaveRequest.id !== id));
+      await deleteLeaveRequest(id).unwrap();
+     
+    }catch (error: any) {
+      console.error('Failed to approve request:', error.data || error.message);
+    }
     
-  };
-
-  const handleDelete = (id: number) => {
-    // Реализация удаления
-    setleaveRequests(leaveRequests.filter((leaveRequest) => leaveRequest.id !== id));
   };
 
 
@@ -31,9 +36,19 @@ const LeaveRequestsPage = () => {
       <div>
         <h1>Leave Requests Page</h1>
       </div>     
-      <LeaveRequestTable leaveRequests={leaveRequests} onEdit={handleEdit} onDelete={handleDelete} />
+      <Button
+        component={Link}
+        to="/create-leave-request"
+        variant="contained"
+        color="primary"
+        sx={{ mt: 2, mb: 2 }}
+      >
+        Create Leave Request
+      </Button>
+      <LeaveRequestTable leaveRequests={leaveRequests} onDelete={handleDelete} />
     </>
   );
 };
 
 export default LeaveRequestsPage;
+ 

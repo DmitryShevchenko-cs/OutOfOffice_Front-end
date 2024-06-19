@@ -2,10 +2,12 @@ import React from "react";
 import { useGetCurrentUserQuery } from "../services/UserService";
 import { RootState } from "../redux/store";
 import { useSelector } from "react-redux";
+import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const MainPage = () => {
-  
-  const {data: user} = useGetCurrentUserQuery(null);
+
+  const { data: user } = useGetCurrentUserQuery(null);
   const role = useSelector((state: RootState) => state.auth.role);
   return (
     <div>

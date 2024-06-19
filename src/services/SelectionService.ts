@@ -1,12 +1,14 @@
 import { api } from "../api/api";
 import { HttpMethodType } from "../types/HttpInfo";
-import { CreateLeaveRequest, LeaveRequest, UpdateLeaveRequest } from "../types/LeaveRequest";
+import { AbsenceReason } from "../types/LeaveRequest";
+import { Project } from "../types/Project";
+import { ProjectType } from "../types/Selections";
 
 export const Api = api.injectEndpoints({
   endpoints: (builder) => ({
-    getAllLeaveRequests: builder.query<LeaveRequest[], null>({
+    getAbsenceReason: builder.query<AbsenceReason[], null>({
       query: () => ({
-        url: "/api/leaverequest",
+        url: "/api/selection/absence-reasons",
         method: HttpMethodType.GET,
         responseHandler: async (response) => {
           if (!response.ok) {
@@ -17,23 +19,9 @@ export const Api = api.injectEndpoints({
         },
       }),
     }),
-    updateLeaveRequest: builder.mutation<null, UpdateLeaveRequest>({
-      query: (data) => ({
-        url: `/api/leaverequest`,
-        method: HttpMethodType.PUT,
-        body: data,
-        responseHandler: async (response) => {
-          if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`HTTP error! Status: ${response.status}, ${errorText}`);
-          }
-          return response.json();
-        },
-      }),
-    }),
-    getLeaveRequest: builder.query<LeaveRequest, number>({
-      query: (requestId) => ({
-        url: `/api/leaverequest/${requestId}`,
+    getProjectType: builder.query<ProjectType[], null>({
+      query: () => ({
+        url: "/api/selection/project-type",
         method: HttpMethodType.GET,
         responseHandler: async (response) => {
           if (!response.ok) {
@@ -44,11 +32,10 @@ export const Api = api.injectEndpoints({
         },
       }),
     }),
-
-    delLeaveRequest: builder.mutation({
-      query: (requestId:number) => ({
-        url: `/api/leaverequest/${requestId}`,
-        method: HttpMethodType.DELETE,
+    getSubdivisions: builder.query<ProjectType[], null>({
+      query: () => ({
+        url: "/api/selection/subdivision",
+        method: HttpMethodType.GET,
         responseHandler: async (response) => {
           if (!response.ok) {
             const errorText = await response.text();
@@ -58,11 +45,10 @@ export const Api = api.injectEndpoints({
         },
       }),
     }),
-    createLeaveRequest: builder.mutation({
-      query: (data:CreateLeaveRequest) => ({
-        url: `/api/leaverequest`,
-        body:data,
-        method: HttpMethodType.POST,
+    getPositions: builder.query<ProjectType[], null>({
+      query: () => ({
+        url: "/api/selection/position",
+        method: HttpMethodType.GET,
         responseHandler: async (response) => {
           if (!response.ok) {
             const errorText = await response.text();
@@ -75,4 +61,4 @@ export const Api = api.injectEndpoints({
   }),
 });
 
-export const { useGetAllLeaveRequestsQuery, useUpdateLeaveRequestMutation, useGetLeaveRequestQuery, useDelLeaveRequestMutation, useCreateLeaveRequestMutation} = Api;
+export const { useGetAbsenceReasonQuery, useGetProjectTypeQuery, useGetPositionsQuery, useGetSubdivisionsQuery } = Api;

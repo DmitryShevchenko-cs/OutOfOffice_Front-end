@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { Project } from '../types/Project';
+import { Project } from '../../types/Project';
 import { Table, TableHead, TableBody, TableRow, TableCell, TableContainer, TableSortLabel, Button } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+import { UserType } from '../../types/User';
+import { Link } from 'react-router-dom';
 
 interface TableProps {
     projects: Project[];
-    onEdit: (id: number) => void;
     onDelete: (id: number) => void;
 }
 
@@ -18,17 +21,16 @@ enum SortField {
     STATUS = 'status',
 }
 
-const EmployeeTable: React.FC<TableProps> = ({ projects, onEdit, onDelete }) => {
+const EmployeeTable: React.FC<TableProps> = ({ projects, onDelete }) => {
     const [sortBy, setSortBy] = useState<SortField>(SortField.ID);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+    const role = useSelector((state: RootState) => state.auth.role);
 
-    // Вспомогательная функция для получения значения поля по пути
     const getFieldByPath = (obj: any, path: string): any => {
         const keys = path.split('.');
         return keys.reduce((acc, key) => acc[key], obj);
     };
 
-    // Функция для сортировки проектов
     const sortedProjects = [...projects].sort((a, b) => {
         const aValue = getFieldByPath(a, sortBy);
         const bValue = getFieldByPath(b, sortBy);
@@ -51,9 +53,13 @@ const EmployeeTable: React.FC<TableProps> = ({ projects, onEdit, onDelete }) => 
         }
     };
 
+    const canEditOrDelete = (role: string) => {
+        return role === UserType.Admin || role === UserType.ProjectManager;
+    };
+
     return (
         <TableContainer>
-            <Table sx={{backgroundColor:"white", borderRadius:"10px"}}>
+            <Table sx={{ backgroundColor: "white", borderRadius: "10px" }}>
                 <TableHead>
                     <TableRow>
                         <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>
@@ -111,23 +117,40 @@ const EmployeeTable: React.FC<TableProps> = ({ projects, onEdit, onDelete }) => 
                                 Status
                             </TableSortLabel>
                         </TableCell>
-                        <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>Actions</TableCell>
+                        {canEditOrDelete(role) && <TableCell sx={{ fontWeight: 'bold', color: "rgb(0, 80, 184)" }}>Actions</TableCell>}
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {sortedProjects.map((project) => (
                         <TableRow key={project.id}>
-                            <TableCell>{project.id}</TableCell>
+                            <TableCell>
+                                <Link to={`/project/${project.id}`}>
+                                    {project.id}
+                                </Link>
+                            </TableCell>
                             <TableCell>{project.projectManager.fullName}</TableCell>
                             <TableCell>{project.projectType.name}</TableCell>
                             <TableCell>{new Date(project.startDate).toLocaleDateString()}</TableCell>
                             <TableCell>{new Date(project.endDate).toLocaleDateString()}</TableCell>
                             <TableCell>{project.comment}</TableCell>
                             <TableCell>{project.status ? 'Active' : 'Inactive'}</TableCell>
-                            <TableCell>
-                                <Button onClick={() => onEdit(project.id)}>Edit</Button>
-                                <Button sx={{color:"red"}} onClick={() => onDelete(project.id)}>Delete</Button>
-                            </TableCell>
+                            {canEditOrDelete(role) && (
+                                <TableCell>
+                                    <Button
+                                        sx={{ border: "1px solid blue", marginRight: "5px" }}
+                                        component={Link}
+                                        to={`/update-project/${project.id}`}
+                                    >
+                                        Edit
+                                    </Button>
+                                    <Button sx={{ border: "1px solid red", color: "red", marginRight: "5px" }} onClick={() => onDelete(project.id)}>Deactivate</Button>
+                                    <Button sx={{ border: "1px solid green", color: "green" }}
+                                        component={Link}
+                                        to={`/project-add-employees/${project.id}`}
+                                    >
+                                        Edit employees</Button>
+                                </TableCell>
+                            )}
                         </TableRow>
                     ))}
                 </TableBody>
