@@ -60,7 +60,7 @@ const ApprovalRequestTable: React.FC<TableProps> = ({ approvalRequests, onApprov
     };
 
     const canEditOrDelete = (role: string): boolean => {
-        return role === UserType.Admin || role === UserType.HrManager || role === UserType.HrManager;
+        return role === UserType.Admin || role === UserType.HrManager || role === UserType.ProjectManager;
     };
 
     const handleCommentChange = (id: number, comment: string): void => {
